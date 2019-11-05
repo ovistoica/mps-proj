@@ -1,59 +1,38 @@
 import * as React from "react"
-import { View, Image, ViewStyle, TextStyle, ImageStyle, SafeAreaView } from "react-native"
+import { View, ViewStyle, TextStyle, SafeAreaView } from "react-native"
 import { NavigationScreenProps } from "react-navigation"
 import { Text } from "../../components/text"
 import { Button } from "../../components/button"
 import { Screen } from "../../components/screen"
+import { FormRow } from "../../components/form-row"
 import { Wallpaper } from "../../components/wallpaper"
 import { Header } from "../../components/header"
 import { color, spacing } from "../../theme"
-import { bowserLogo } from "./"
+import { TextInput } from "react-native-gesture-handler"
 
 const FULL: ViewStyle = { flex: 1 }
 const CONTAINER: ViewStyle = {
+  flex: 0.8,
   backgroundColor: color.transparent,
   paddingHorizontal: spacing[4],
+  justifyContent: "center",
+  alignItems: "center",
 }
 const TEXT: TextStyle = {
   color: color.palette.white,
   fontFamily: "Montserrat",
 }
 const BOLD: TextStyle = { fontWeight: "bold" }
-const HEADER: TextStyle = {
-  paddingTop: spacing[3],
-  paddingBottom: spacing[4] + spacing[1],
-  paddingHorizontal: 0,
-}
+
 const HEADER_TITLE: TextStyle = {
   ...TEXT,
   ...BOLD,
-  fontSize: 12,
+  fontSize: 16,
   lineHeight: 15,
   textAlign: "center",
   letterSpacing: 1.5,
 }
-const TITLE_WRAPPER: TextStyle = {
-  ...TEXT,
-  textAlign: "center",
-}
-const TITLE: TextStyle = {
-  ...TEXT,
-  ...BOLD,
-  fontSize: 28,
-  lineHeight: 38,
-  textAlign: "center",
-}
-const ALMOST: TextStyle = {
-  ...TEXT,
-  ...BOLD,
-  fontSize: 26,
-  fontStyle: "italic",
-}
-const BOWSER: ImageStyle = {
-  alignSelf: "center",
-  marginVertical: spacing[5],
-  maxWidth: "100%",
-}
+
 const CONTENT: TextStyle = {
   ...TEXT,
   color: "#BAB6C8",
@@ -61,6 +40,7 @@ const CONTENT: TextStyle = {
   lineHeight: 22,
   marginBottom: spacing[5],
 }
+
 const CONTINUE: ViewStyle = {
   paddingVertical: spacing[4],
   paddingHorizontal: spacing[4],
@@ -72,10 +52,30 @@ const CONTINUE_TEXT: TextStyle = {
   fontSize: 13,
   letterSpacing: 2,
 }
-const FOOTER: ViewStyle = { backgroundColor: "#20162D" }
+const FOOTER: ViewStyle = { backgroundColor: "#20162D", flex: 0.2 }
 const FOOTER_CONTENT: ViewStyle = {
   paddingVertical: spacing[4],
   paddingHorizontal: spacing[4],
+}
+const FOOTER_TEXT: TextStyle = {
+  ...CONTENT,
+  fontSize: 11,
+  marginTop: 25,
+  textAlign: "left",
+  paddingLeft: 0,
+  alignSelf: "flex-start",
+}
+
+const SUPPORT_EMAIL: TextStyle = {
+  ...FOOTER_TEXT,
+  textDecorationLine: "underline",
+}
+
+const FORM_INPUT: ViewStyle = {
+  height: 50,
+  flexDirection: "row",
+  alignItems: "center",
+  marginTop: 20,
 }
 
 export interface WelcomeScreenProps extends NavigationScreenProps<{}> {}
@@ -89,21 +89,22 @@ export const WelcomeScreen: React.FunctionComponent<WelcomeScreenProps> = props 
     <View testID="WelcomeScreen" style={FULL}>
       <Wallpaper />
       <Screen style={CONTAINER} preset="scroll" backgroundColor={color.transparent}>
-        <Header headerTx="welcomeScreen.poweredBy" style={HEADER} titleStyle={HEADER_TITLE} />
-        <Text style={TITLE_WRAPPER}>
-          <Text style={TITLE} text="Your new app, " />
-          <Text style={ALMOST} text="almost" />
-          <Text style={TITLE} text="!" />
-        </Text>
-        <Text style={TITLE} preset="header" tx="welcomeScreen.readyForLaunch" />
-        <Image source={bowserLogo} style={BOWSER} />
-        <Text style={CONTENT}>
-          This probably isn't what your app is going to look like. Unless your designer handed you
-          this screen and, in that case, congrats! You're ready to ship.
-        </Text>
-        <Text style={CONTENT}>
-          For everyone else, this is where you'll see a live preview of your fully functioning app
-          using Ignite.
+        <Header headerText={"Login to start voting"} titleStyle={HEADER_TITLE} />
+        <FormRow preset={"soloRound"} style={FORM_INPUT}>
+          <Text preset={"fieldLabel"} style={{ flex: 0.2 }}>
+            E-mail
+          </Text>
+          <TextInput style={{ flex: 0.8, color: "white" }}></TextInput>
+        </FormRow>
+        <FormRow preset={"soloRound"} style={FORM_INPUT}>
+          <Text preset={"fieldLabel"} style={{ flex: 0.2 }}>
+            Password
+          </Text>
+          <TextInput style={{ flex: 0.8, color: "white" }}></TextInput>
+        </FormRow>
+        <Text preset="secondary" style={FOOTER_TEXT}>
+          If you don't have an account, contact administration at{" "}
+          <Text style={SUPPORT_EMAIL}>admin@voteMps.com</Text> to register as a jury member
         </Text>
       </Screen>
       <SafeAreaView style={FOOTER}>
@@ -112,7 +113,7 @@ export const WelcomeScreen: React.FunctionComponent<WelcomeScreenProps> = props 
             testID="next-screen-button"
             style={CONTINUE}
             textStyle={CONTINUE_TEXT}
-            tx="welcomeScreen.continue"
+            text="Login"
             onPress={nextScreen}
           />
         </View>
