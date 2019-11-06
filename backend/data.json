@@ -1,0 +1,149 @@
+[
+{
+    "model": "api.contest",
+    "pk": 2,
+    "fields": {
+        "name": "Concurs de dans UPB",
+        "type": "Battle",
+        "password": "test"
+    }
+},
+{
+    "model": "api.round",
+    "pk": 1,
+    "fields": {
+        "contest": 2,
+        "round_no": 1,
+        "start_time": "2019-11-05T17:21:05Z",
+        "end_time": "2019-11-05T20:21:07Z"
+    }
+},
+{
+    "model": "api.participant",
+    "pk": 1,
+    "fields": {
+        "first_name": "Floricia",
+        "last_name": "Dansatoarea",
+        "start_time": "2019-11-05T17:20:51Z",
+        "end_time": "2019-11-05T20:20:53Z",
+        "round": [
+            1
+        ]
+    }
+},
+{
+    "model": "api.participant",
+    "pk": 2,
+    "fields": {
+        "first_name": "Florinel",
+        "last_name": "de la Galati",
+        "start_time": "2019-11-05T20:21:48Z",
+        "end_time": "2019-11-05T21:21:53Z",
+        "round": [
+            1
+        ]
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 1,
+    "fields": {
+        "name": "Can add log entry",
+        "content_type": 1,
+        "codename": "add_logentry"
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$150000$LxAQ3mnkGVFz$iy9juD8AEW2njywwOJVCQ63gt24/JVv2naMuAqGUup8=",
+        "last_login": "2019-11-05T16:37:40.800Z",
+        "is_superuser": true,
+        "username": "admin",
+        "first_name": "",
+        "last_name": "",
+        "email": "",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2019-11-05T16:37:18.543Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+        "password": "pbkdf2_sha256$150000$DJsyZ0YbtMvU$MnXIICefl7GmndVQt1kaVXXPBVKFfp511UeLgf3InsI=",
+        "last_login": null,
+        "is_superuser": true,
+        "username": "Ionel Popescu",
+        "first_name": "",
+        "last_name": "",
+        "email": "",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2019-11-05T16:37:18.543Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 3,
+    "fields": {
+        "password": "pbkdf2_sha256$150000$DJsyZ0YbtMvU$MnXIICefl7GmndVQt1kaVXXPBVKFfp511UeLgf3InsI=",
+        "last_login": null,
+        "is_superuser": true,
+        "username": "Andrei Petre",
+        "first_name": "",
+        "last_name": "",
+        "email": "",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2019-11-05T16:37:18.543Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 1,
+    "fields": {
+        "action_time": "2019-11-05T17:21:14.549Z",
+        "user": 1,
+        "content_type": 8,
+        "object_id": "1",
+        "object_repr": "Round object (1)",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 2,
+    "fields": {
+        "action_time": "2019-11-05T17:21:24.579Z",
+        "user": 1,
+        "content_type": 10,
+        "object_id": "1",
+        "object_repr": "Participant object (1)",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 3,
+    "fields": {
+        "action_time": "2019-11-05T17:21:57.890Z",
+        "user": 1,
+        "content_type": 10,
+        "object_id": "2",
+        "object_repr": "Participant object (2)",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+}
+]
