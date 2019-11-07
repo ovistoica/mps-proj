@@ -1,4 +1,4 @@
-import * as React from "react"
+import React, { useEffect, useState } from "react"
 import { View, ViewStyle, TextStyle, SafeAreaView } from "react-native"
 import { NavigationScreenProps } from "react-navigation"
 import { Text } from "../../components/text"
@@ -9,6 +9,7 @@ import { Wallpaper } from "../../components/wallpaper"
 import { Header } from "../../components/header"
 import { color, spacing } from "../../theme"
 import { TextInput } from "react-native-gesture-handler"
+import { Api, User, GetUsersResult } from "../../services/api"
 
 const FULL: ViewStyle = { flex: 1 }
 const CONTAINER: ViewStyle = {
@@ -78,12 +79,49 @@ const FORM_INPUT: ViewStyle = {
   marginTop: 20,
 }
 
+const TEXT_INPUT: TextStyle = {
+  flex: 0.8,
+  color: "white",
+}
+
 export interface WelcomeScreenProps extends NavigationScreenProps<{}> {}
+export interface UserCredentials {
+  email: string
+  password: string
+}
 
 export const WelcomeScreen: React.FunctionComponent<WelcomeScreenProps> = props => {
+  const [userCredentials, setUserCredentials] = useState<UserCredentials>(undefined)
+  const api = new Api()
   const nextScreen = React.useMemo(() => () => props.navigation.navigate("demo"), [
     props.navigation,
   ])
+
+  const onChangeEmail = (email: string): void => {
+    const newUserCredentials: UserCredentials = {
+      email: email,
+      password: userCredentials.password || "",
+    }
+    setUserCredentials(newUserCredentials)
+  }
+
+  const onPasswordChange = (password: string): void => {
+    const newUserCredentials: UserCredentials = {
+      email: userCredentials.email || "",
+      password: password || "",
+    }
+    setUserCredentials(newUserCredentials)
+  }
+
+  const fetch = async () => {
+    const users: GetUsersResult = await api.getUsers()
+    console.log(users)
+  }
+
+  useEffect(() => {
+    api.setup()
+    fetch()
+  }, [])
 
   return (
     <View testID="WelcomeScreen" style={FULL}>
@@ -94,13 +132,21 @@ export const WelcomeScreen: React.FunctionComponent<WelcomeScreenProps> = props 
           <Text preset={"fieldLabel"} style={{ flex: 0.2 }}>
             E-mail
           </Text>
-          <TextInput style={{ flex: 0.8, color: "white" }}></TextInput>
+          <TextInput
+            style={TEXT_INPUT}
+            textContentType="emailAddress"
+            onChangeText={onChangeEmail}
+          ></TextInput>
         </FormRow>
         <FormRow preset={"soloRound"} style={FORM_INPUT}>
           <Text preset={"fieldLabel"} style={{ flex: 0.2 }}>
             Password
           </Text>
-          <TextInput style={{ flex: 0.8, color: "white" }}></TextInput>
+          <TextInput
+            style={TEXT_INPUT}
+            textContentType="password"
+            onChangeText={onPasswordChange}
+          ></TextInput>
         </FormRow>
         <Text preset="secondary" style={FOOTER_TEXT}>
           If you don't have an account, contact administration at{" "}
