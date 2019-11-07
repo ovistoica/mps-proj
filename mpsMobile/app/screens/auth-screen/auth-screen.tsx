@@ -99,12 +99,13 @@ export const AuthScreen: React.FunctionComponent<
     () => () => props.navigation.navigate('demo'),
     [props.navigation],
   );
-  const login = React.useMemo(async () => {
-    const res: GetLoginResult = await api.login(userCredentials);
-    if (res.kind === 'ok') {
-      setToken(token);
-    }
-  }, []);
+  const onLoginPress = () => {
+    api.login(userCredentials).then(res => {
+      if (res.kind === 'ok') {
+        setToken(token);
+      }
+    });
+  };
 
   const onChangeEmail = (email: string): void => {
     const newUserCredentials: UserCredentials = {
@@ -169,7 +170,7 @@ export const AuthScreen: React.FunctionComponent<
             style={CONTINUE}
             textStyle={CONTINUE_TEXT}
             text="Login"
-            onPress={() => login())}
+            onPress={onLoginPress}
           />
         </View>
       </SafeAreaView>
