@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=32)),
                 ('type', models.CharField(max_length=32)),
-                ('password', models.CharField(default=django.contrib.auth.hashers.make_password, max_length=32)),
+                ('password', models.CharField(max_length=32)),
             ],
         ),
         migrations.CreateModel(

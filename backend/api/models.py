@@ -4,7 +4,7 @@ from django.contrib.auth.hashers import make_password
 class Contest(models.Model):
     name = models.CharField(max_length=32)
     type = models.CharField(max_length=32)
-    password = models.CharField(max_length=32, default=make_password)
+    password = models.CharField(max_length=32)
 
     def __str__(self):
         return "Contest({})".format(self.name)
