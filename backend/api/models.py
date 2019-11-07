@@ -5,6 +5,10 @@ class Contest(models.Model):
     name = models.CharField(max_length=32)
     type = models.CharField(max_length=32)
     password = models.CharField(max_length=32)
+    current_round = models.IntegerField()
+    round_nums = models.IntegerField()
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
 
     def __str__(self):
         return "Contest({})".format(self.name)
@@ -12,6 +16,8 @@ class Contest(models.Model):
 
 class Juror(models.Model):
     contest = models.ManyToManyField(Contest)
+    username = models.CharField(max_length=32)
+    password = models.CharField(max_length=32)
 
 class Round(models.Model):
 	contest = models.ForeignKey(Contest, on_delete=models.CASCADE)

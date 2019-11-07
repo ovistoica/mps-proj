@@ -23,7 +23,7 @@ The superuser is `admin` with password `admin1234`
 ### TODO
  - Implement CRUD (Create, Read, Update, Delete) views for:
 	 - [x] Contest `/api/contest`
-	 - [ ] Juror `/api/Juror`
+	 - [x] Juror `/api/Juror`
 	 - [x] Round `/api/round`
 	 - [x] Series `/api/series`
 	 - [x] Participant `/api/participant`
