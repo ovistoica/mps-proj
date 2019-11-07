@@ -90,11 +90,15 @@ export interface WelcomeScreenProps extends NavigationScreenProps<{}> {}
 export const AuthScreen: React.FunctionComponent<
   WelcomeScreenProps
 > = props => {
-  const [userCredentials, setUserCredentials] = useState<UserCredentials>(
-    undefined,
-  );
+  const [userCredentials, setUserCredentials] = useState<UserCredentials>({
+    email: '',
+    password: '',
+  });
   const [token, setToken] = useState<number>(undefined);
   const api = new Api();
+  useEffect(() => {
+    api.setup();
+  }, []);
   const nextScreen = React.useMemo(
     () => () => props.navigation.navigate('demo'),
     [props.navigation],
@@ -105,6 +109,10 @@ export const AuthScreen: React.FunctionComponent<
         setToken(token);
       }
     });
+  };
+
+  const onLoginTest = () => {
+    console.log('TEAI LOGAT', userCredentials);
   };
 
   const onChangeEmail = (email: string): void => {
@@ -136,8 +144,8 @@ export const AuthScreen: React.FunctionComponent<
           titleStyle={HEADER_TITLE}
         />
         <FormRow preset={'soloRound'} style={FORM_INPUT}>
-          <Text preset={'fieldLabel'} style={{ flex: 0.2 }}>
-            E-mail
+          <Text preset={'fieldLabel'} style={{ flex: 0.16 }}>
+            Email
           </Text>
           <TextInput
             style={TEXT_INPUT}
@@ -147,7 +155,7 @@ export const AuthScreen: React.FunctionComponent<
           ></TextInput>
         </FormRow>
         <FormRow preset={'soloRound'} style={FORM_INPUT}>
-          <Text preset={'fieldLabel'} style={{ flex: 0.2 }}>
+          <Text preset={'fieldLabel'} style={{ flex: 0.18 }}>
             Password
           </Text>
           <TextInput
@@ -170,7 +178,7 @@ export const AuthScreen: React.FunctionComponent<
             style={CONTINUE}
             textStyle={CONTINUE_TEXT}
             text="Login"
-            onPress={onLoginPress}
+            onPress={onLoginTest}
           />
         </View>
       </SafeAreaView>
