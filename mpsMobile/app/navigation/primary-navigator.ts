@@ -1,16 +1,14 @@
-import { createStackNavigator } from "react-navigation"
-import { WelcomeScreen } from "../screens/welcome-screen"
-import { DemoScreen } from "../screens/demo-screen"
+import { createStackNavigator } from 'react-navigation';
+import { AuthScreen } from '../screens/auth-screen';
 
 export const PrimaryNavigator = createStackNavigator(
   {
-    welcome: { screen: WelcomeScreen },
-    demo: { screen: DemoScreen },
+    auth: { screen: AuthScreen },
   },
   {
-    headerMode: "none",
+    headerMode: 'none',
   },
-)
+);
 
 /**
  * A list of routes from which we're allowed to leave the app when
@@ -19,4 +17,4 @@ export const PrimaryNavigator = createStackNavigator(
  * Anything not on this list will be a standard `back` action in
  * react-navigation.
  */
-export const exitRoutes: string[] = ["welcome"]
+export const exitRoutes: string[] = ['auth'];
