@@ -9,8 +9,10 @@ import { Wallpaper } from '../../components/wallpaper';
 import { Header } from '../../components/header';
 import { color, spacing } from '../../theme';
 import { TextInput } from 'react-native-gesture-handler';
-import { localApi } from '../../services/api';
 import { UserCredentials } from './auth.types';
+import { RootStore, useStores } from '../../models/root-store';
+import { observable } from 'mobx';
+import { UserStatusType } from '../../models/user';
 
 const FULL: ViewStyle = { flex: 1 };
 const CONTAINER: ViewStyle = {
@@ -68,7 +70,7 @@ const FOOTER_TEXT: TextStyle = {
   alignSelf: 'flex-start',
 };
 
-const SUPPORT_EMAIL: TextStyle = {
+const SUPPORT_username: TextStyle = {
   ...FOOTER_TEXT,
   textDecorationLine: 'underline',
 };
@@ -85,29 +87,29 @@ const TEXT_INPUT: TextStyle = {
   color: 'white',
 };
 
-export interface WelcomeScreenProps extends NavigationScreenProps<{}> {}
+export interface AuthScreenProps extends NavigationScreenProps<{}> {
+  rootStore: RootStore;
+}
 
-export const AuthScreen: React.FunctionComponent<WelcomeScreenProps> = props => {
+const AuthScreenComponent: React.FunctionComponent<AuthScreenProps> = props => {
+  const rootStore = useStores();
+
   const [userCredentials, setUserCredentials] = useState<UserCredentials>({
-    email: '',
+    username: '',
     password: '',
   });
-  const [token, setToken] = useState<string>(undefined);
 
   const nextScreen = React.useMemo(() => () => props.navigation.navigate('demo'), [
     props.navigation,
   ]);
+
   const onLoginPress = () => {
-    localApi.login(userCredentials).then(res => {
-      if (res.kind === 'ok') {
-        setToken(res.token);
-      }
-    });
+    rootStore.login(userCredentials);
   };
 
-  const onChangeEmail = (email: string): void => {
+  const onChangeUsername = (username: string): void => {
     const newUserCredentials: UserCredentials = {
-      email: email,
+      username: username,
       password: userCredentials.password || '',
     };
     setUserCredentials(newUserCredentials);
@@ -115,7 +117,7 @@ export const AuthScreen: React.FunctionComponent<WelcomeScreenProps> = props => 
 
   const onPasswordChange = (password: string): void => {
     const newUserCredentials: UserCredentials = {
-      email: userCredentials.email || '',
+      username: userCredentials.username || '',
       password: password || '',
     };
     setUserCredentials(newUserCredentials);
@@ -128,13 +130,13 @@ export const AuthScreen: React.FunctionComponent<WelcomeScreenProps> = props => 
         <Header headerText={'Login to start voting'} titleStyle={HEADER_TITLE} />
         <FormRow preset={'soloRound'} style={FORM_INPUT}>
           <Text preset={'fieldLabel'} style={{ flex: 0.16 }}>
-            Email
+            Username
           </Text>
           <TextInput
             style={TEXT_INPUT}
-            textContentType="emailAddress"
-            onChangeText={onChangeEmail}
-            value={userCredentials.email}
+            textContentType="nickname"
+            onChangeText={onChangeUsername}
+            value={userCredentials.username}
           ></TextInput>
         </FormRow>
         <FormRow preset={'soloRound'} style={FORM_INPUT}>
@@ -150,7 +152,7 @@ export const AuthScreen: React.FunctionComponent<WelcomeScreenProps> = props => 
         </FormRow>
         <Text preset="secondary" style={FOOTER_TEXT}>
           If you don't have an account, contact administration at{' '}
-          <Text style={SUPPORT_EMAIL}>admin@voteMps.com</Text> to register as a jury member
+          <Text style={SUPPORT_username}>admin@voteMps.com</Text> to register as a jury member
         </Text>
       </Screen>
       <SafeAreaView style={FOOTER}>
@@ -167,3 +169,5 @@ export const AuthScreen: React.FunctionComponent<WelcomeScreenProps> = props => 
     </View>
   );
 };
+
+export const AuthScreen = observable(AuthScreenComponent);

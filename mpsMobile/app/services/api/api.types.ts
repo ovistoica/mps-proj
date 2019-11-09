@@ -7,4 +7,4 @@ export interface User {
 
 export type GetUsersResult = { kind: 'ok'; users: User[] } | GeneralApiProblem;
 export type GetUserResult = { kind: 'ok'; user: User } | GeneralApiProblem;
-export type GetLoginResult = { kind: 'ok'; token: string } | GeneralApiProblem;
+export type GetLoginResult = { kind: 'ok'; token: string; email: string } | GeneralApiProblem;

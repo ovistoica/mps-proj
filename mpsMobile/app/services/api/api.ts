@@ -115,9 +115,3 @@ export class Api {
     }
   }
 }
-
-const localApiConfig: ApiConfig = {
-  url: 'http://localhost:3000',
-  timeout: 2000,
-};
-export const localApi = new Api(localApiConfig);
