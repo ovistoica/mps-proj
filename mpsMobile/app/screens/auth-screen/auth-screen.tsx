@@ -70,7 +70,7 @@ const FOOTER_TEXT: TextStyle = {
   alignSelf: 'flex-start',
 };
 
-const SUPPORT_username: TextStyle = {
+const SUPPORT_USERNAME: TextStyle = {
   ...FOOTER_TEXT,
   textDecorationLine: 'underline',
 };
@@ -152,7 +152,7 @@ const AuthScreenComponent: React.FunctionComponent<AuthScreenProps> = props => {
         </FormRow>
         <Text preset="secondary" style={FOOTER_TEXT}>
           If you don't have an account, contact administration at{' '}
-          <Text style={SUPPORT_username}>admin@voteMps.com</Text> to register as a jury member
+          <Text style={SUPPORT_USERNAME}>admin@voteMps.com</Text> to register as a jury member
         </Text>
       </Screen>
       <SafeAreaView style={FOOTER}>
