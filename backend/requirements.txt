@@ -1,4 +1,4 @@
 django>=2.2.6
 djangorestframework
 drf-generators
-django-rest-auth
+django-oauth-toolkit>=1.2.0

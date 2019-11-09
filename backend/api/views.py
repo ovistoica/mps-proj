@@ -38,6 +38,7 @@ class ContestAPIView(APIView):
 class ContestAPIListView(APIView):
 
     def get(self, request, format=None):
+        print("Request from user: ", request.user)
         items = Contest.objects.all()
         paginator = PageNumberPagination()
         result_page = paginator.paginate_queryset(items, request)
