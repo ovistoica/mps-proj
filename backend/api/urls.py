@@ -20,4 +20,6 @@ urlpatterns = [
 
 	url(r'^grade/(?P<id>[0-9]+)$', views.GradeAPIView.as_view()),
 	url(r'^grade/$', views.GradeAPIListView.as_view()),
+
+	url(r'^rest-auth/', include('rest_auth.urls')),
 ]
