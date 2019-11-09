@@ -46,10 +46,7 @@ export class Api {
   }
 
   async login(credentials: UserCredentials): Promise<Types.GetLoginResult> {
-    const response: ApiResponse<any> = await this.apisauce.post(
-      '/api/auth',
-      credentials,
-    );
+    const response: ApiResponse<any> = await this.apisauce.post('/auth/signin', credentials);
 
     // the typical ways to die when calling an api
     if (!response.ok) {
@@ -57,7 +54,7 @@ export class Api {
       if (problem) return problem;
     }
 
-    const userToken: number = response.data.token;
+    const userToken: string = response.data.accessToken;
 
     return { kind: 'ok', token: userToken };
   }
@@ -118,3 +115,9 @@ export class Api {
     }
   }
 }
+
+const localApiConfig: ApiConfig = {
+  url: 'http://localhost:3000',
+  timeout: 2000,
+};
+export const localApi = new Api(localApiConfig);
