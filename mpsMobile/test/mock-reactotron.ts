@@ -1,2 +1,2 @@
-declare var tron
-tron = null
+declare var tron;
+tron = null;

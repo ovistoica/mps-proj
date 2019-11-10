@@ -1,10 +1,5 @@
 import { GeneralApiProblem } from './api-problem';
+import { ContestSnapshot } from '../../models/contest';
 
-export interface User {
-  id: number;
-  name: string;
-}
-
-export type GetUsersResult = { kind: 'ok'; users: User[] } | GeneralApiProblem;
-export type GetUserResult = { kind: 'ok'; user: User } | GeneralApiProblem;
-export type GetLoginResult = { kind: 'ok'; token: string } | GeneralApiProblem;
+export type GetLoginResult = { kind: 'ok'; token: string; email: string } | GeneralApiProblem;
+export type GetContestsResult = { kind: 'ok'; contests: ContestSnapshot[] } | GeneralApiProblem;

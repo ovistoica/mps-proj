@@ -1,5 +1,9 @@
 {
-  "generators": {},
+  "generators": {
+    "component": "ignite-ir-boilerplate-bowser",
+    "model": "ignite-ir-boilerplate-bowser",
+    "screen": "ignite-ir-boilerplate-bowser"
+  },
   "createdWith": "3.2.1",
   "boilerplate": "ignite-bowser",
   "boilerplateVersion": "4.9.0"

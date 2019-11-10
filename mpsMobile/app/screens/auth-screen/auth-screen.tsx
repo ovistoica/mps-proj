@@ -1,27 +1,27 @@
-import React, { useState } from 'react';
-import { View, ViewStyle, TextStyle, SafeAreaView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, ViewStyle, TextStyle, SafeAreaView, ActivityIndicator } from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
 import { Text } from '../../components/text';
 import { Button } from '../../components/button';
 import { Screen } from '../../components/screen';
 import { FormRow } from '../../components/form-row';
-import { Wallpaper } from '../../components/wallpaper';
 import { Header } from '../../components/header';
 import { color, spacing } from '../../theme';
 import { TextInput } from 'react-native-gesture-handler';
-import { localApi } from '../../services/api';
 import { UserCredentials } from './auth.types';
+import { RootStore, useStores } from '../../models/root-store';
+import { observer } from 'mobx-react';
 
 const FULL: ViewStyle = { flex: 1 };
 const CONTAINER: ViewStyle = {
-  flex: 0.8,
+  flex: 1,
   backgroundColor: color.transparent,
   paddingHorizontal: spacing[4],
   justifyContent: 'center',
   alignItems: 'center',
 };
 const TEXT: TextStyle = {
-  color: color.palette.white,
+  color: color.text,
   fontFamily: 'Montserrat',
 };
 const BOLD: TextStyle = { fontWeight: 'bold' };
@@ -37,7 +37,7 @@ const HEADER_TITLE: TextStyle = {
 
 const CONTENT: TextStyle = {
   ...TEXT,
-  color: '#BAB6C8',
+  color: color.text,
   fontSize: 15,
   lineHeight: 22,
   marginBottom: spacing[5],
@@ -46,7 +46,7 @@ const CONTENT: TextStyle = {
 const CONTINUE: ViewStyle = {
   paddingVertical: spacing[4],
   paddingHorizontal: spacing[4],
-  backgroundColor: '#5D2555',
+  backgroundColor: color.primary,
 };
 const CONTINUE_TEXT: TextStyle = {
   ...TEXT,
@@ -54,60 +54,66 @@ const CONTINUE_TEXT: TextStyle = {
   fontSize: 13,
   letterSpacing: 2,
 };
-const FOOTER: ViewStyle = { backgroundColor: '#20162D', flex: 0.2 };
+const FOOTER: ViewStyle = { backgroundColor: color.background, flex: 0.2 };
 const FOOTER_CONTENT: ViewStyle = {
   paddingVertical: spacing[4],
   paddingHorizontal: spacing[4],
 };
-const FOOTER_TEXT: TextStyle = {
-  ...CONTENT,
-  fontSize: 11,
-  marginTop: 25,
-  textAlign: 'left',
-  paddingLeft: 0,
-  alignSelf: 'flex-start',
-};
-
-const SUPPORT_EMAIL: TextStyle = {
-  ...FOOTER_TEXT,
-  textDecorationLine: 'underline',
-};
 
 const FORM_INPUT: ViewStyle = {
-  height: 50,
+  height: 60,
   flexDirection: 'row',
   alignItems: 'center',
   marginTop: 20,
 };
 
 const TEXT_INPUT: TextStyle = {
-  flex: 0.8,
-  color: 'white',
+  flex: 1,
+  color: color.text,
 };
 
-export interface WelcomeScreenProps extends NavigationScreenProps<{}> {}
+const ERROR_MSG: ViewStyle = {
+  ...FORM_INPUT,
+  borderColor: color.palette.angry,
+  position: 'absolute',
+  bottom: 0,
+};
 
-export const AuthScreen: React.FunctionComponent<WelcomeScreenProps> = props => {
+// const ERROR_TEXT: TextStyle = {
+//   ...
+// }
+
+export interface AuthScreenProps extends NavigationScreenProps<{}> {
+  rootStore: RootStore;
+}
+
+const AuthScreenComponent: React.FunctionComponent<AuthScreenProps> = props => {
+  const rootStore = useStores();
+
   const [userCredentials, setUserCredentials] = useState<UserCredentials>({
-    email: '',
+    username: '',
     password: '',
   });
-  const [token, setToken] = useState<string>(undefined);
-
-  const nextScreen = React.useMemo(() => () => props.navigation.navigate('demo'), [
+  const [loading, setLoading] = useState<boolean>(true);
+  const { status } = rootStore.user;
+  const nextScreen = React.useMemo(() => () => props.navigation.navigate('contests'), [
     props.navigation,
   ]);
+
+  useEffect(() => {
+    if (status === 'success') {
+      nextScreen();
+    }
+    setLoading(false);
+  }, [status]);
+
   const onLoginPress = () => {
-    localApi.login(userCredentials).then(res => {
-      if (res.kind === 'ok') {
-        setToken(res.token);
-      }
-    });
+    rootStore.login(userCredentials);
   };
 
-  const onChangeEmail = (email: string): void => {
+  const onChangeUsername = (username: string): void => {
     const newUserCredentials: UserCredentials = {
-      email: email,
+      username: username,
       password: userCredentials.password || '',
     };
     setUserCredentials(newUserCredentials);
@@ -115,43 +121,47 @@ export const AuthScreen: React.FunctionComponent<WelcomeScreenProps> = props => 
 
   const onPasswordChange = (password: string): void => {
     const newUserCredentials: UserCredentials = {
-      email: userCredentials.email || '',
+      username: userCredentials.username || '',
       password: password || '',
     };
     setUserCredentials(newUserCredentials);
   };
 
-  return (
+  return loading ? (
+    <ActivityIndicator size="large" color={color.primary}/>
+  ) : (
     <View testID="WelcomeScreen" style={FULL}>
-      <Wallpaper />
-      <Screen style={CONTAINER} preset="scroll" backgroundColor={color.transparent}>
+      <Screen style={CONTAINER} preset="scroll" backgroundColor={color.background}>
         <Header headerText={'Login to start voting'} titleStyle={HEADER_TITLE} />
+
         <FormRow preset={'soloRound'} style={FORM_INPUT}>
-          <Text preset={'fieldLabel'} style={{ flex: 0.16 }}>
-            Email
-          </Text>
           <TextInput
+            placeholder="Username"
+            placeholderTextColor={color.dim}
             style={TEXT_INPUT}
-            textContentType="emailAddress"
-            onChangeText={onChangeEmail}
-            value={userCredentials.email}
+            textContentType="nickname"
+            onChangeText={onChangeUsername}
+            value={userCredentials.username}
+            autoCapitalize="none"
           ></TextInput>
         </FormRow>
         <FormRow preset={'soloRound'} style={FORM_INPUT}>
-          <Text preset={'fieldLabel'} style={{ flex: 0.18 }}>
-            Password
-          </Text>
           <TextInput
+            placeholder="password"
             style={TEXT_INPUT}
+            placeholderTextColor={color.dim}
             textContentType="password"
             value={userCredentials.password}
             onChangeText={onPasswordChange}
+            autoCapitalize="none"
+            secureTextEntry={true}
           ></TextInput>
         </FormRow>
-        <Text preset="secondary" style={FOOTER_TEXT}>
-          If you don't have an account, contact administration at{' '}
-          <Text style={SUPPORT_EMAIL}>admin@voteMps.com</Text> to register as a jury member
-        </Text>
+        {status === 'error' && (
+          <FormRow preset={'top'} style={ERROR_MSG}>
+            <Text>Something went wrong. Please try again</Text>
+          </FormRow>
+        )}
       </Screen>
       <SafeAreaView style={FOOTER}>
         <View style={FOOTER_CONTENT}>
@@ -167,3 +177,5 @@ export const AuthScreen: React.FunctionComponent<WelcomeScreenProps> = props => 
     </View>
   );
 };
+
+export const AuthScreen = observer(AuthScreenComponent);

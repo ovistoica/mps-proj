@@ -1,12 +1,36 @@
 import { createStackNavigator } from 'react-navigation';
 import { AuthScreen } from '../screens/auth-screen';
+import { ContestsScreen } from '../screens/contests-screen';
+import { color } from '../theme/color';
 
 export const PrimaryNavigator = createStackNavigator(
   {
-    auth: { screen: AuthScreen },
+    auth: {
+      screen: AuthScreen,
+      navigationOptions: {
+        header: null,
+      },
+    },
+    contests: {
+      screen: ContestsScreen,
+      navigationOptions: {
+        title: 'Your Contests',
+      },
+    },
   },
   {
-    headerMode: 'none',
+    headerMode: 'screen',
+    initialRouteName: 'contests',
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: color.primaryDarker,
+      },
+      headerTintColor: color.text,
+      headerTitleStyle: {
+        fontWeight: 'bold',
+        textAlign: 'center',
+      },
+    },
   },
 );
 
