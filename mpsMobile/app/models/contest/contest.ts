@@ -4,8 +4,8 @@ import { Instance, SnapshotOut, types } from 'mobx-state-tree';
  * Model description here for TypeScript hints.
  */
 export const ContestModel = types.model('Contest').props({
-  id: types.identifier,
-  contest_id: types.number,
+  id: types.number,
+  name: types.string,
   type: types.string,
   numberOfRounds: types.number,
   currentRound: types.number,

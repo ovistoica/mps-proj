@@ -21,5 +21,5 @@ export const StatefulNavigator: React.FunctionComponent<{}> = observer(() => {
     () => currentNavigation,
   );
 
-  return <RootNavigator navigation={currentNavigation} style={{ flex: 1 }} />;
+  return <RootNavigator navigation={currentNavigation} />;
 });

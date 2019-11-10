@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, ViewStyle, TextStyle, SafeAreaView } from 'react-native';
+import { View, ViewStyle, TextStyle, SafeAreaView, ActivityIndicator } from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
 import { Text } from '../../components/text';
 import { Button } from '../../components/button';
 import { Screen } from '../../components/screen';
 import { FormRow } from '../../components/form-row';
-import { Wallpaper } from '../../components/wallpaper';
 import { Header } from '../../components/header';
 import { color, spacing } from '../../theme';
 import { TextInput } from 'react-native-gesture-handler';
@@ -95,16 +94,18 @@ const AuthScreenComponent: React.FunctionComponent<AuthScreenProps> = props => {
     username: '',
     password: '',
   });
+  const [loading, setLoading] = useState<boolean>(true);
   const { status } = rootStore.user;
   const nextScreen = React.useMemo(() => () => props.navigation.navigate('contests'), [
     props.navigation,
   ]);
 
-  // useEffect(() => {
-  //   if (status === 'success') {
-  //     nextScreen();
-  //   }
-  // }, [status]);
+  useEffect(() => {
+    if (status === 'success') {
+      nextScreen();
+    }
+    setLoading(false);
+  }, [status]);
 
   const onLoginPress = () => {
     rootStore.login(userCredentials);
@@ -126,7 +127,9 @@ const AuthScreenComponent: React.FunctionComponent<AuthScreenProps> = props => {
     setUserCredentials(newUserCredentials);
   };
 
-  return (
+  return loading ? (
+    <ActivityIndicator size="large" color={color.primary}/>
+  ) : (
     <View testID="WelcomeScreen" style={FULL}>
       <Screen style={CONTAINER} preset="scroll" backgroundColor={color.background}>
         <Header headerText={'Login to start voting'} titleStyle={HEADER_TITLE} />
@@ -168,15 +171,6 @@ const AuthScreenComponent: React.FunctionComponent<AuthScreenProps> = props => {
             textStyle={CONTINUE_TEXT}
             text="Login"
             onPress={onLoginPress}
-          />
-          <Button
-            testID="next-screen-button"
-            style={CONTINUE}
-            textStyle={CONTINUE_TEXT}
-            text="Test"
-            onPress={() => {
-              props.navigation.navigate({ routeName: 'contests' });
-            }}
           />
         </View>
       </SafeAreaView>

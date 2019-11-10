@@ -3,8 +3,6 @@ import { AuthScreen } from '../screens/auth-screen';
 import { ContestsScreen } from '../screens/contests-screen';
 import { color } from '../theme/color';
 
-const stackOptions = {};
-
 export const PrimaryNavigator = createStackNavigator(
   {
     auth: {
@@ -13,7 +11,12 @@ export const PrimaryNavigator = createStackNavigator(
         header: null,
       },
     },
-    contests: { screen: ContestsScreen },
+    contests: {
+      screen: ContestsScreen,
+      navigationOptions: {
+        title: 'Your Contests',
+      },
+    },
   },
   {
     headerMode: 'screen',
@@ -22,9 +25,10 @@ export const PrimaryNavigator = createStackNavigator(
       headerStyle: {
         backgroundColor: color.primaryDarker,
       },
-      headerTintColor: color.primary,
+      headerTintColor: color.text,
       headerTitleStyle: {
         fontWeight: 'bold',
+        textAlign: 'center',
       },
     },
   },
