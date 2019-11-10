@@ -7,7 +7,7 @@ import { Api, ApiConfig } from '../services/api';
  */
 
 const localApiConfig: ApiConfig = {
-  url: 'http://localhost:8000',
+  url: 'http://localhost:8000/api',
   timeout: 2000,
 };
 

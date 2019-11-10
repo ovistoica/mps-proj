@@ -4,6 +4,7 @@ import { UserModel, UserSnapshot } from '../user';
 import { ContestSnapshot, ContestModel } from '../contest';
 import { Api } from '../../services/api';
 import { UserCredentials } from '../../screens/auth-screen';
+import { NavigationActions } from 'react-navigation';
 
 /**
  * A RootStore model.
@@ -26,7 +27,6 @@ export const RootStoreModel = types
       const api: Api = getEnv(self).api;
       api.login(userCredentials).then(res => {
         if (res.kind !== 'ok') {
-          console.tron('Something went wrong with the request', res);
           self.user.setStatus('error');
         } else {
           const newSignedInUser: UserSnapshot = {
@@ -36,6 +36,7 @@ export const RootStoreModel = types
             status: 'success',
           };
           self.user.setUser(newSignedInUser);
+          self.navigationStore.dispatch(NavigationActions.navigate({ routeName: 'contests' }));
         }
       });
     },

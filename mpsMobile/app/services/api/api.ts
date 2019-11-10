@@ -46,7 +46,18 @@ export class Api {
   }
 
   async login(credentials: UserCredentials): Promise<Types.GetLoginResult> {
-    const response: ApiResponse<any> = await this.apisauce.post('/auth/signin', credentials);
+    const data = new FormData();
+    data.append('username', credentials.username);
+    data.append('password', credentials.password);
+    data.append('grant_type', 'password');
+
+    const response: ApiResponse<any> = await this.apisauce.post('/auth/token/', data, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization:
+          'Basic MzZqSjZTRThsVlNrZmVUOWxvUTduaWk1YjE3c3paRElMOFk4MldGaTo1QzJpS3NMelJsa3dua3VscUZnbXZmNHJrZEVDREhsVnBNVjUwbkpoTmx0ekNEY3o1REZWNGJ5Yno1MjN1TjVoQVNLeFFvcW9tenZqem9pVnczNEt5WlZVQ1dEVnQ2R29TblNsSmh1b1NRbWhpNzZKOTlXRThHd3BYbDE0cDJZWA==',
+      },
+    });
 
     // the typical ways to die when calling an api
     if (!response.ok) {
@@ -54,9 +65,10 @@ export class Api {
       if (problem) return problem;
     }
 
-    const userToken: string = response.data.accessToken;
+    const token: string = response.data.access_token;
+    const email = response.data.email ? response.data.email : '';
 
-    return { kind: 'ok', token: userToken };
+    return { kind: 'ok', token, email };
   }
 
   /**

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, ViewStyle, TextStyle, SafeAreaView } from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
 import { Text } from '../../components/text';
@@ -11,19 +11,18 @@ import { color, spacing } from '../../theme';
 import { TextInput } from 'react-native-gesture-handler';
 import { UserCredentials } from './auth.types';
 import { RootStore, useStores } from '../../models/root-store';
-import { observable } from 'mobx';
-import { UserStatusType } from '../../models/user';
+import { observer } from 'mobx-react';
 
 const FULL: ViewStyle = { flex: 1 };
 const CONTAINER: ViewStyle = {
-  flex: 0.8,
+  flex: 1,
   backgroundColor: color.transparent,
   paddingHorizontal: spacing[4],
   justifyContent: 'center',
   alignItems: 'center',
 };
 const TEXT: TextStyle = {
-  color: color.palette.white,
+  color: color.text,
   fontFamily: 'Montserrat',
 };
 const BOLD: TextStyle = { fontWeight: 'bold' };
@@ -39,7 +38,7 @@ const HEADER_TITLE: TextStyle = {
 
 const CONTENT: TextStyle = {
   ...TEXT,
-  color: '#BAB6C8',
+  color: color.text,
   fontSize: 15,
   lineHeight: 22,
   marginBottom: spacing[5],
@@ -48,7 +47,7 @@ const CONTENT: TextStyle = {
 const CONTINUE: ViewStyle = {
   paddingVertical: spacing[4],
   paddingHorizontal: spacing[4],
-  backgroundColor: '#5D2555',
+  backgroundColor: color.primary,
 };
 const CONTINUE_TEXT: TextStyle = {
   ...TEXT,
@@ -56,36 +55,34 @@ const CONTINUE_TEXT: TextStyle = {
   fontSize: 13,
   letterSpacing: 2,
 };
-const FOOTER: ViewStyle = { backgroundColor: '#20162D', flex: 0.2 };
+const FOOTER: ViewStyle = { backgroundColor: color.background, flex: 0.2 };
 const FOOTER_CONTENT: ViewStyle = {
   paddingVertical: spacing[4],
   paddingHorizontal: spacing[4],
 };
-const FOOTER_TEXT: TextStyle = {
-  ...CONTENT,
-  fontSize: 11,
-  marginTop: 25,
-  textAlign: 'left',
-  paddingLeft: 0,
-  alignSelf: 'flex-start',
-};
-
-const SUPPORT_USERNAME: TextStyle = {
-  ...FOOTER_TEXT,
-  textDecorationLine: 'underline',
-};
 
 const FORM_INPUT: ViewStyle = {
-  height: 50,
+  height: 60,
   flexDirection: 'row',
   alignItems: 'center',
   marginTop: 20,
 };
 
 const TEXT_INPUT: TextStyle = {
-  flex: 0.8,
-  color: 'white',
+  flex: 1,
+  color: color.text,
 };
+
+const ERROR_MSG: ViewStyle = {
+  ...FORM_INPUT,
+  borderColor: color.palette.angry,
+  position: 'absolute',
+  bottom: 0,
+};
+
+// const ERROR_TEXT: TextStyle = {
+//   ...
+// }
 
 export interface AuthScreenProps extends NavigationScreenProps<{}> {
   rootStore: RootStore;
@@ -98,10 +95,16 @@ const AuthScreenComponent: React.FunctionComponent<AuthScreenProps> = props => {
     username: '',
     password: '',
   });
-
-  const nextScreen = React.useMemo(() => () => props.navigation.navigate('demo'), [
+  const { status } = rootStore.user;
+  const nextScreen = React.useMemo(() => () => props.navigation.navigate('contests'), [
     props.navigation,
   ]);
+
+  // useEffect(() => {
+  //   if (status === 'success') {
+  //     nextScreen();
+  //   }
+  // }, [status]);
 
   const onLoginPress = () => {
     rootStore.login(userCredentials);
@@ -125,35 +128,37 @@ const AuthScreenComponent: React.FunctionComponent<AuthScreenProps> = props => {
 
   return (
     <View testID="WelcomeScreen" style={FULL}>
-      <Wallpaper />
-      <Screen style={CONTAINER} preset="scroll" backgroundColor={color.transparent}>
+      <Screen style={CONTAINER} preset="scroll" backgroundColor={color.background}>
         <Header headerText={'Login to start voting'} titleStyle={HEADER_TITLE} />
+
         <FormRow preset={'soloRound'} style={FORM_INPUT}>
-          <Text preset={'fieldLabel'} style={{ flex: 0.16 }}>
-            Username
-          </Text>
           <TextInput
+            placeholder="Username"
+            placeholderTextColor={color.dim}
             style={TEXT_INPUT}
             textContentType="nickname"
             onChangeText={onChangeUsername}
             value={userCredentials.username}
+            autoCapitalize="none"
           ></TextInput>
         </FormRow>
         <FormRow preset={'soloRound'} style={FORM_INPUT}>
-          <Text preset={'fieldLabel'} style={{ flex: 0.18 }}>
-            Password
-          </Text>
           <TextInput
+            placeholder="password"
             style={TEXT_INPUT}
+            placeholderTextColor={color.dim}
             textContentType="password"
             value={userCredentials.password}
             onChangeText={onPasswordChange}
+            autoCapitalize="none"
+            secureTextEntry={true}
           ></TextInput>
         </FormRow>
-        <Text preset="secondary" style={FOOTER_TEXT}>
-          If you don't have an account, contact administration at{' '}
-          <Text style={SUPPORT_USERNAME}>admin@voteMps.com</Text> to register as a jury member
-        </Text>
+        {status === 'error' && (
+          <FormRow preset={'top'} style={ERROR_MSG}>
+            <Text>Something went wrong. Please try again</Text>
+          </FormRow>
+        )}
       </Screen>
       <SafeAreaView style={FOOTER}>
         <View style={FOOTER_CONTENT}>
@@ -164,10 +169,19 @@ const AuthScreenComponent: React.FunctionComponent<AuthScreenProps> = props => {
             text="Login"
             onPress={onLoginPress}
           />
+          <Button
+            testID="next-screen-button"
+            style={CONTINUE}
+            textStyle={CONTINUE_TEXT}
+            text="Test"
+            onPress={() => {
+              props.navigation.navigate({ routeName: 'contests' });
+            }}
+          />
         </View>
       </SafeAreaView>
     </View>
   );
 };
 
-export const AuthScreen = observable(AuthScreenComponent);
+export const AuthScreen = observer(AuthScreenComponent);

@@ -6,20 +6,29 @@ import { Screen } from '../../components/screen';
 // import { useStores } from "../../models/root-store"
 import { color } from '../../theme';
 import { NavigationScreenProps } from 'react-navigation';
+import { Button } from '../../components/button';
+import SplashScreen from 'react-native-splash-screen';
 
 export interface ContestsScreenProps extends NavigationScreenProps<{}> {}
 
 const ROOT: ViewStyle = {
-  backgroundColor: color.palette.black,
+  backgroundColor: color.background,
 };
 
 export const ContestsScreen: React.FunctionComponent<ContestsScreenProps> = observer(props => {
   // const { someStore } = useStores()
+  React.useEffect(() => {
+    SplashScreen.hide();
+  }, []);
   return (
     <Screen style={ROOT} preset="scroll">
-      <Text preset="header" tx="contestsScreen.header">
-        Your Contests
-      </Text>
+      <Text preset="header">Your Contests</Text>
+      <Button
+        text="ZII MA"
+        onPress={() => {
+          props.navigation.navigate('auth');
+        }}
+      />
     </Screen>
   );
 });
