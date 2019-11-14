@@ -161,15 +161,16 @@ class RoundAPIView(APIView):
             serializer.save()
             contest_id = id
             password = serializer.validated_data.get('password')
-            try:
-                item = Contest.objects.filter(pk=contest_id, password=password)
-                Round.objects.filter(contest_id=contest_id).update(allow=1)
-                item = Round.objects.filter(contest_id=id, allow=1)
-                serializer2 = RoundSerializer(item, many=True)
-            except Contest.DoesNotExist:
+            item = Contest.objects.filter(pk=contest_id, password=password).count()
+            print(item)
+            if item == 0:
                 Round.objects.filter(contest_id=contest_id).update(allow=0)
                 return Response(status=404)
-            return Response(serializer2.data)
+            else:
+                Round.objects.filter(contest_id=contest_id).update(allow=1)
+                item2 = Round.objects.filter(contest_id=id, allow=1)
+                serializer2 = RoundSerializer(item2, many=True)
+                return Response(serializer2.data)
         return Response(serializer.errors, status=400)
 
 
