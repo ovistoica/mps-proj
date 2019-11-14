@@ -229,6 +229,8 @@ PODS:
     - React
   - RNScreens (2.0.0-alpha.6):
     - React
+  - RNVectorIcons (6.1.0):
+    - React
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -265,6 +267,7 @@ DEPENDENCIES:
   - RNKeychain (from `../node_modules/react-native-keychain`)
   - RNLocalize (from `../node_modules/react-native-localize`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -332,6 +335,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-localize"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNVectorIcons:
+    :path: "../node_modules/react-native-vector-icons"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -367,6 +372,7 @@ SPEC CHECKSUMS:
   RNKeychain: c658833a9cb2cbcba6423bdd6e16cce59e27da0e
   RNLocalize: 07eb7a91d10021cdf59d80061ebf3adb8a5b5688
   RNScreens: 73691421e207a57b85af0fea931e620b05a35e89
+  RNVectorIcons: ac7bf6bfeafaf3ad34552cdc6eed6fb8c4b7c940
   Yoga: 14927e37bd25376d216b150ab2a561773d57911f
 
 PODFILE CHECKSUM: 1ebcc8746205e2dd9ab888f4ce9b27403d95d356

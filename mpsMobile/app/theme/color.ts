@@ -23,15 +23,25 @@ export const color = {
   /**
    * The screen background.
    */
-  background: palette.darkBlue,
+  background: palette.gray,
+
+  /**
+   * The color used for top surfaces like modals
+   */
+  top: palette.white,
   /**
    * The main tinting color.
    */
-  primary: palette.paleGreen,
+  primary: palette.grayBlue[1],
   /**
    * The main tinting color, but darker.
    */
-  primaryDarker: palette.lightBlue,
+  primaryDarker: palette.grayBlue[2],
+
+  /**
+   * The second tinting color
+   */
+  secondary: palette.orange,
   /**
    * A subtle color used for borders and lines.
    */
@@ -39,11 +49,15 @@ export const color = {
   /**
    * The default color of text in many components.
    */
-  text: palette.white,
+  text: palette.grayBlue[2],
+  /**
+   * The color used for text in buttons and headers
+   */
+  textReversed: palette.white,
   /**
    * Secondary information.
    */
-  dim: palette.lightGrey,
+  dim: palette.grayBlue[0],
   /**
    * Error messages and icons.
    */

@@ -3,22 +3,28 @@ import { observer } from 'mobx-react-lite';
 import { ViewStyle, View, TextStyle, FlatList, TouchableOpacity } from 'react-native';
 import { Text } from '../../components/text';
 import { Screen } from '../../components/screen';
-import { useStores } from '../../models/root-store';
+import { useStores, RootStore } from '../../models/root-store';
 import { NavigationScreenProps } from 'react-navigation';
-import { spacing, color } from '../../theme';
+import { spacing, color, typography } from '../../theme';
+import { getSnapshot } from 'mobx-state-tree';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-export interface ContestsScreenProps extends NavigationScreenProps<{}> {}
+const trophyIcon = <Icon name="trophy" size={30} color={color.secondary} />;
+
+export interface ContestsScreenProps extends NavigationScreenProps<{}> {
+  rootStore: RootStore;
+}
 
 const FULL: ViewStyle = { flex: 1 };
 const CONTAINER: ViewStyle = {
+  backgroundColor: color.background,
   flex: 1,
-  backgroundColor: color.transparent,
   paddingHorizontal: spacing[4],
   alignItems: 'center',
 };
 const TEXT: TextStyle = {
   color: color.text,
-  fontFamily: 'Montserrat',
+  fontFamily: typography.primary,
 };
 const BOLD: TextStyle = { fontWeight: 'bold' };
 
@@ -31,20 +37,17 @@ const HEADER_TITLE: TextStyle = {
   letterSpacing: 1.5,
 };
 const CONTEST: ViewStyle = {
-  // width: '100%',
   height: 60,
-  flexDirection: 'column',
+  flexDirection: 'row',
   alignItems: 'center',
-  justifyContent: 'center',
-  backgroundColor: color.primaryDarker,
+  justifyContent: 'space-between',
+  backgroundColor: color.top,
   padding: 20,
   marginVertical: 10,
-  borderRadius: 8,
 };
-const ROUND: TextStyle = {
+const CONTEST_NAME: TextStyle = {
   ...TEXT,
   ...BOLD,
-  color: color.primary,
 };
 const LIST: ViewStyle = {
   marginTop: 20,
@@ -52,11 +55,17 @@ const LIST: ViewStyle = {
 };
 
 const renderContest = ({ item }) => (
-  <TouchableOpacity onPress={() => console.log('PRESSS')} style={CONTEST}>
-    <Text style={TEXT}>{item.name} </Text>
-    <Text style={TEXT}>
-      Current Round: <Text style={ROUND}>{item.currentRound}</Text>
-    </Text>
+  <TouchableOpacity style={CONTEST}>
+    <View>{trophyIcon}</View>
+
+    <View style={{ marginLeft: 10, justifyContent: 'flex-start', flexDirection: 'row', width: 150 }}>
+      <Text style={[CONTEST_NAME, { alignSelf: 'flex-start' }]}>{item.name} </Text>
+    </View>
+
+    <View>
+      <Text style={CONTEST_NAME}>Type: {item.type} </Text>
+      <Text style={CONTEST_NAME}>Round: {item.currentRound} </Text>
+    </View>
   </TouchableOpacity>
 );
 
@@ -79,7 +88,7 @@ export const ContestsScreen: React.FunctionComponent<ContestsScreenProps> = obse
       <Screen style={CONTAINER} preset="fixed" backgroundColor={color.background}>
         <FlatList
           style={LIST}
-          data={contests}
+          data={getSnapshot(contests)}
           renderItem={renderContest}
           keyExtractor={item => 'contest' + item.id}
         />

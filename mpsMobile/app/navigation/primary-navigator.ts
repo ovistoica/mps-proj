@@ -23,9 +23,9 @@ export const PrimaryNavigator = createStackNavigator(
     initialRouteName: 'contests',
     defaultNavigationOptions: {
       headerStyle: {
-        backgroundColor: color.primaryDarker,
+        backgroundColor: color.primary,
       },
-      headerTintColor: color.text,
+      headerTintColor: color.textReversed,
       headerTitleStyle: {
         fontWeight: 'bold',
         textAlign: 'center',

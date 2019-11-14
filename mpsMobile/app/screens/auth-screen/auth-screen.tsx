@@ -53,6 +53,7 @@ const CONTINUE_TEXT: TextStyle = {
   ...BOLD,
   fontSize: 13,
   letterSpacing: 2,
+  color: color.textReversed,
 };
 const FOOTER: ViewStyle = { backgroundColor: color.background, flex: 0.2 };
 const FOOTER_CONTENT: ViewStyle = {
@@ -128,7 +129,7 @@ const AuthScreenComponent: React.FunctionComponent<AuthScreenProps> = props => {
   };
 
   return loading ? (
-    <ActivityIndicator size="large" color={color.primary}/>
+    <ActivityIndicator size="large" color={color.primary} />
   ) : (
     <View testID="WelcomeScreen" style={FULL}>
       <Screen style={CONTAINER} preset="scroll" backgroundColor={color.background}>
