@@ -14,7 +14,7 @@ class ContestAPIView(APIView):
             cont = Contest.objects.filter(juror__username = name)
             contId = cont.get(pk=id)
         except Contest.DoesNotExist:
-            return Response(status=404)
+            return Response(status=401)
         item = Participant.objects.filter(contests__id = id, status = 1)
         serializer = ParticipantSerializer(item, many=True)
         return Response(serializer.data)
@@ -155,7 +155,7 @@ class RoundAPIView(APIView):
             cont = Contest.objects.filter(juror__username = name)
             contId = cont.get(pk=id)
         except Contest.DoesNotExist:
-            return Response(status=404)
+            return Response(status=401)
         serializer = ContestSerializerPost(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -165,7 +165,7 @@ class RoundAPIView(APIView):
             print(item)
             if item == 0:
                 Round.objects.filter(contest_id=contest_id).update(allow=0)
-                return Response(status=404)
+                return Response(status=401)
             else:
                 Round.objects.filter(contest_id=contest_id).update(allow=1)
                 item2 = Round.objects.filter(contest_id=id, allow=1)
@@ -202,7 +202,7 @@ class SeriesAPIView(APIView):
             nr = contId.contest.id
             contE = cont.get(pk=nr)
         except Contest.DoesNotExist:
-            return Response(status=404)
+            return Response(status=401)
         try:
             item = Series.objects.filter(round_id=id)
             serializer = SeriesSerializer(item, many=True)
