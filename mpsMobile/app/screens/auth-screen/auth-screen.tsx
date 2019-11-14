@@ -66,6 +66,7 @@ const FORM_INPUT: ViewStyle = {
   flexDirection: 'row',
   alignItems: 'center',
   marginTop: 20,
+  backgroundColor: color.top,
 };
 
 const TEXT_INPUT: TextStyle = {
