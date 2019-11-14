@@ -107,27 +107,27 @@ class JurorAPIListView(APIView):
 
 class RoundAPIView(APIView):
 
-    def get(self, request, id, format=None):
-        try:
-            print("Request from user: ", request.user)
-            name = request.user
-            cont = Contest.objects.filter(juror__username = name)
-            contId = cont.get(pk=id)
-        except Contest.DoesNotExist:
-            return Response(status=404)
-        try:
-            item2 = Round.objects.filter(contest_id=id, allow=1).count()
-            item = Round.objects.filter(contest_id=id, allow=1)
-            round_no = Contest.objects.get(pk=id)
-            print(round_no)
-            print(item2)
-            serializer = RoundSerializer(item, many=True)
-            if item2 == round_no.round_nums:
-                return Response(serializer.data)
-            else:
-                return Response(status=404)
-        except Round.DoesNotExist:
-            return Response(status=404)
+    # def get(self, request, id, format=None):
+    #     try:
+    #         print("Request from user: ", request.user)
+    #         name = request.user
+    #         cont = Contest.objects.filter(juror__username = name)
+    #         contId = cont.get(pk=id)
+    #     except Contest.DoesNotExist:
+    #         return Response(status=404)
+    #     try:
+    #         item2 = Round.objects.filter(contest_id=id, allow=1).count()
+    #         item = Round.objects.filter(contest_id=id, allow=1)
+    #         round_no = Contest.objects.get(pk=id)
+    #         print(round_no)
+    #         print(item2)
+    #         serializer = RoundSerializer(item, many=True)
+    #         if item2 == round_no.round_nums:
+    #             return Response(serializer.data)
+    #         else:
+    #             return Response(status=404)
+    #     except Round.DoesNotExist:
+    #         return Response(status=404)
 
     def put(self, request, id, format=None):
         try:
@@ -149,6 +149,13 @@ class RoundAPIView(APIView):
         return Response(status=204)
 
     def post(self, request, id, format=None):
+        try:
+            print("Request from user: ", request.user)
+            name = request.user
+            cont = Contest.objects.filter(juror__username = name)
+            contId = cont.get(pk=id)
+        except Contest.DoesNotExist:
+            return Response(status=404)
         serializer = ContestSerializerPost(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -156,11 +163,13 @@ class RoundAPIView(APIView):
             password = serializer.validated_data.get('password')
             try:
                 item = Contest.objects.filter(pk=contest_id, password=password)
-                print('ceva')
                 Round.objects.filter(contest_id=contest_id).update(allow=1)
+                item = Round.objects.filter(contest_id=id, allow=1)
+                serializer2 = RoundSerializer(item, many=True)
             except Contest.DoesNotExist:
                 Round.objects.filter(contest_id=contest_id).update(allow=0)
-            return Response(serializer.data, status=201)
+                return Response(status=404)
+            return Response(serializer2.data)
         return Response(serializer.errors, status=400)
 
 
@@ -365,6 +374,21 @@ class NoteAPIListView(APIView):
             coregrafie = serializer.validated_data.get('coregrafie')
             corectitudine = serializer.validated_data.get('corectitudine')
             componentaArtistica = serializer.validated_data.get('componentaArtistica')
-
+            procent = Grade.objects.get(contest__id=contest_id)
+            nota = procent.ritm * ritm + procent.coregrafie * coregrafie
+            nota = nota + procent.corectitudine * corectitudine
+            nota = nota + procent.componentaArtistica * componentaArtistica
+            nota = nota / 100
+            # nota_veche =
+            Round.objects.filter(contest_id=contest_id).update(nota)
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
+
+
+# class RezultatAPIListView(APIView):
+#     def get(self, request, format=None):
+#         items = Grade.objects.all()
+#         paginator = PageNumberPagination()
+#         result_page = paginator.paginate_queryset(items, request)
+#         serializer = GradeSerializer(result_page, many=True)
+#         return paginator.get_paginated_response(serializer.data)
