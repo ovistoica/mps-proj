@@ -3,14 +3,15 @@ import { Instance, SnapshotOut, types } from 'mobx-state-tree';
 /**
  * Model description here for TypeScript hints.
  */
-export const RoundModel = types
-  .model('Round')
+export const ParticipantModel = types
+  .model('Participant')
   .props({
     id: types.number,
-    contestId: types.number,
+    firstName: types.string,
+    lastName: types.string,
     startTime: types.string,
     endTime: types.string,
-    roundNumber: types.number,
+    contestId: types.number,
   })
   .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions(self => ({})); // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -23,7 +24,7 @@ export const RoundModel = types
   *  .postProcessSnapshot(omit(["password", "socialSecurityNumber", "creditCardNumber"]))
   */
 
-type RoundType = Instance<typeof RoundModel>;
-export interface Round extends RoundType {}
-type RoundSnapshotType = SnapshotOut<typeof RoundModel>;
-export interface RoundSnapshot extends RoundSnapshotType {}
+type ParticipantType = Instance<typeof ParticipantModel>;
+export interface Participant extends ParticipantType {}
+type ParticipantSnapshotType = SnapshotOut<typeof ParticipantModel>;
+export interface ParticipantSnapshot extends ParticipantSnapshotType {}

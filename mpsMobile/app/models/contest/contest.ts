@@ -1,6 +1,7 @@
 import { Instance, SnapshotOut, types, getEnv } from 'mobx-state-tree';
 import { RoundModel, RoundSnapshot } from '../round';
 import { Api } from '../../services/api';
+import { getRoundStatus } from '../../components/round-card';
 
 /**
  * Model description here for TypeScript hints.
@@ -17,6 +18,19 @@ export const ContestModel = types
     rounds: types.optional(types.array(RoundModel), []),
     status: types.optional(types.enumeration(['success', 'error', 'offline']), 'offline'),
   })
+  .views(self => ({
+    /**
+     * Get the ordered rounds by start time
+     */
+    get orderedRounds(): RoundSnapshot[] {
+      return self.rounds.sort((a, b) => {
+        const startA = Date.parse(a.startTime);
+        const startB = Date.parse(b.startTime);
+
+        return startA - startB;
+      });
+    },
+  }))
   .actions(self => ({
     setRounds: (rounds: RoundSnapshot[]) => {
       self.rounds.replace(rounds as any);

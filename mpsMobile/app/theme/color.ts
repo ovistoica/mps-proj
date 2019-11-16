@@ -23,12 +23,42 @@ export const color = {
   /**
    * The screen background.
    */
-  background: palette.gray,
+  /**
+   * The screen background.
+   */
+  background: palette.cream[2],
 
   /**
-   * The color used for top surfaces like modals
+   * Inactive areas or form inputs
    */
-  top: palette.white,
+  underground: palette.cream[3],
+
+  /**
+   * The color used for top surfaces like modals and headers
+   */
+  top: palette.white[1],
+  /**
+   * The color for basic sheets existing on top of the main screens: Ideas borders, Articles, Topic Boxes
+   */
+  surface: palette.cream[1],
+
+  /**
+   * The main text color
+   */
+  text: palette.black[2],
+  /**
+   * The secondary text color. Used in elements with lower importance
+   */
+  textSecondary: palette.darkBlue,
+  /**
+   * The color for text on deactivated items
+   */
+  textMuted: palette.gray[2],
+
+  /**
+   * The color for text on items like buttons or items with primary/secondary colors
+   */
+  textInverted: palette.white[2],
   /**
    * The main tinting color.
    */
@@ -41,23 +71,12 @@ export const color = {
   /**
    * The second tinting color
    */
-  secondary: palette.orange,
+  secondary: palette.orange[4],
   /**
    * A subtle color used for borders and lines.
    */
   line: palette.offWhite,
-  /**
-   * The default color of text in many components.
-   */
-  text: palette.grayBlue[2],
-  /**
-   * The color used for text in buttons and headers
-   */
-  textReversed: palette.white,
-  /**
-   * Secondary information.
-   */
-  dim: palette.grayBlue[0],
+
   /**
    * Error messages and icons.
    */

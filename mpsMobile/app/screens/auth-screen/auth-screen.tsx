@@ -53,7 +53,7 @@ const CONTINUE_TEXT: TextStyle = {
   ...BOLD,
   fontSize: 13,
   letterSpacing: 2,
-  color: color.textReversed,
+  color: color.textInverted,
 };
 const FOOTER: ViewStyle = { backgroundColor: color.background, flex: 0.2 };
 const FOOTER_CONTENT: ViewStyle = {

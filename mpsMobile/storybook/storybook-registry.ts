@@ -1,3 +1,4 @@
+require("../app/components/round-card/round-card.story")
 require('../app/components/contest-card/contest-card.story');
 require('../app/components/text/text.story');
 require('../app/components/button/button.story');

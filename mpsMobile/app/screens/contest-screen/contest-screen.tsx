@@ -7,14 +7,17 @@ import { useStores } from '../../models/root-store';
 import { color } from '../../theme';
 import { NavigationScreenProps } from 'react-navigation';
 import { Header } from '../../components/header';
-import { ContestSnapshot } from '../../models';
+import { FlatList } from 'react-native-gesture-handler';
+import { getSnapshot } from 'mobx-state-tree';
+import { RoundSnapshot } from '../../models';
+import { RoundCard } from '../../components/round-card';
 
 export interface ContestScreenProps extends NavigationScreenProps<{}> {
   contestId: string;
 }
 
 const ROOT: ViewStyle = {
-  backgroundColor: color.palette.black,
+  backgroundColor: color.background,
 };
 
 const HEADER: ViewStyle = {
@@ -22,7 +25,7 @@ const HEADER: ViewStyle = {
 };
 
 const TITLE: TextStyle = {
-  color: color.textReversed,
+  color: color.textInverted,
   fontSize: 20,
   fontWeight: 'bold',
 };
@@ -30,15 +33,17 @@ const TITLE: TextStyle = {
 export const ContestScreen: React.FunctionComponent<ContestScreenProps> = observer(props => {
   const { contestsStore, user } = useStores();
 
-  const id = props.navigation.getParam('contestId', 'NO_ID');
+  const id = props.navigation.getParam('contestId' as never);
   const contest = contestsStore.getContest(id);
 
   React.useEffect(() => {
     contest.fetchRounds(user.token);
   }, []);
 
+  const renderRound = ({ item }: { item: RoundSnapshot }) => <RoundCard round={item} />;
+
   return (
-    <Screen style={ROOT} preset="scroll">
+    <Screen style={ROOT} preset="fixed">
       <Header
         style={HEADER}
         leftIcon="back"
@@ -46,23 +51,11 @@ export const ContestScreen: React.FunctionComponent<ContestScreenProps> = observ
         headerText={contest.name}
         titleStyle={TITLE}
       />
-      {/* <Text preset="header" style={{ color: 'white' }}>
-        {contest.name}
-      </Text> */}
+      <FlatList<RoundSnapshot>
+        data={contest.orderedRounds}
+        renderItem={renderRound}
+        keyExtractor={it => `round ${it.id}`}
+      />
     </Screen>
   );
 });
-
-// ContestScreen.prop.navigationOptions = ({navigation}) => {
-//   return {
-//     title: navigation.state.params.title,
-//     headerLeft: (
-//       <Icon
-//         name="chevron-left"
-//         size={40}
-//         color="#ffffff"
-//         onPress={() => navigation.goBack()}
-//       />
-//     ),
-//   };
-// };

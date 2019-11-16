@@ -4,8 +4,13 @@ import { ApiConfig, DEFAULT_API_CONFIG } from './api-config';
 import * as Types from './api.types';
 import { UserCredentials } from '../../screens/auth-screen';
 import { ContestSnapshot } from '../../models/contest';
-import { normalizeContest, normalizeContestRounds } from '../../utils/contest.utils';
-import { RoundSnapshot } from '../../models';
+import {
+  normalizeContest,
+  normalizeContestRounds,
+  normalizeRoundSeries,
+  normalizeParticipant,
+} from '../../utils/contest.utils';
+import { RoundSnapshot, SeriesSnapshot, ParticipantSnapshot } from '../../models';
 
 /**
  * Manages all requests to the API.
@@ -20,6 +25,12 @@ export class Api {
    * Configurable options.
    */
   config: ApiConfig;
+
+  /**
+   *
+   * The token after the user has been logged in
+   */
+  token: string;
 
   /**
    * Creates the api.
@@ -48,14 +59,18 @@ export class Api {
     });
   }
 
+  setToken(userToken: string) {
+    this.token = userToken;
+  }
+
   /**
    * Requests all contests that the user will vote on
    */
-  async getContests(userToken: string): Promise<Types.GetContestsResult> {
+  async getContests(): Promise<Types.GetContestsResult> {
     const response: ApiResponse<any> = await this.apisauce.get(
       '/contest',
       {},
-      { headers: { Authorization: `Bearer ${userToken}` } },
+      { headers: { Authorization: `Bearer ${this.token}` } },
     );
     if (!response.ok) {
       const problem = getGeneralApiProblem(response);
@@ -80,18 +95,17 @@ export class Api {
    * @param contestPassword The password to be granted access to the contest
    */
   async getContestRounds(
-    userToken: string,
     contestId: number,
     contestPassword: string,
   ): Promise<Types.GetRoundsResult> {
-    console.log('USER TOKEN', userToken, 'PASSSWORD', contestPassword);
+    console.log('USER TOKEN', this.token, 'PASSSWORD', contestPassword);
     const data = new FormData();
     data.append('password', contestPassword);
 
     const response: ApiResponse<any> = await this.apisauce.post(`/round/${contestId}`, data, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        Authorization: `Bearer ${userToken} `,
+        Authorization: `Bearer ${this.token} `,
       },
     });
     console.log('RESPONSE', response);
@@ -106,6 +120,40 @@ export class Api {
     );
 
     return { kind: 'ok', rounds };
+  }
+
+  async getRoundSeries(roundId: string): Promise<Types.GetSeriesResult> {
+    const response: ApiResponse<any> = await this.apisauce.get(
+      `/series/${roundId}`,
+      {},
+      { headers: { Authorization: `Bearer ${this.token}` } },
+    );
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response);
+      if (problem) return problem;
+    }
+
+    const series: SeriesSnapshot[] = response.data.map(serie => normalizeRoundSeries(serie));
+
+    return { kind: 'ok', series };
+  }
+
+  async getParticipants(seriesId: string): Promise<Types.GetParticipantsResult> {
+    const response: ApiResponse<any> = await this.apisauce.get(
+      `/participant/${seriesId}`,
+      {},
+      { headers: { Authorization: `Bearer ${this.token}` } },
+    );
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response);
+      if (problem) return problem;
+    }
+
+    const participants: ParticipantSnapshot[] = response.data.map(participant =>
+      normalizeParticipant(participant),
+    );
+
+    return { kind: 'ok', participants };
   }
 
   /**
@@ -128,11 +176,12 @@ export class Api {
     if (!response.ok) {
       const problem = getGeneralApiProblem(response);
       if (problem) return problem;
+    } else {
+      const token: string = response.data.access_token;
+      this.setToken(token);
+      const email = response.data.email ? response.data.email : '';
+
+      return { kind: 'ok', token, email };
     }
-
-    const token: string = response.data.access_token;
-    const email = response.data.email ? response.data.email : '';
-
-    return { kind: 'ok', token, email };
   }
 }

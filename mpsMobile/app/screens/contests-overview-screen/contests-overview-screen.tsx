@@ -31,7 +31,7 @@ export const ContestsOverviewScreen: React.FunctionComponent<
 > = observer(props => {
   const { user, contestsStore } = useStores();
 
-  const renderContest = ({ item }) => (
+  const renderContest = ({ item }: { item: ContestSnapshot }) => (
     <ContestCard
       contest={item}
       onPress={() => props.navigation.push('contest', { contestId: item.id as any })}

@@ -32,7 +32,7 @@ export const PrimaryNavigator = createStackNavigator(
       headerStyle: {
         backgroundColor: color.primary,
       },
-      headerTintColor: color.textReversed,
+      headerTintColor: color.textInverted,
       headerTitleStyle: {
         fontWeight: 'bold',
         textAlign: 'center',
