@@ -47,6 +47,7 @@ export class Api {
       },
     });
   }
+
   /**
    * Requests all contests that the user will vote on
    */
@@ -68,6 +69,7 @@ export class Api {
       contests: contestSnapshots,
     };
   }
+
   /**
    * Requests all rounds of a contest
    *

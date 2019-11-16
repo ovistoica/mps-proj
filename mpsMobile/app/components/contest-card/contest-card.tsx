@@ -5,6 +5,8 @@ import { ContestSnapshot } from '../../models/contest';
 import { color, typography, spacing } from '../../theme';
 import { mergeAll, flatten } from 'ramda';
 
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 export interface ContestCardProps {
   /**
    * Function triggered when the card is pressed
@@ -52,8 +54,6 @@ const NAME_CONTAINER: ViewStyle = {
   flexDirection: 'row',
   width: 150,
 };
-
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 const trophyIcon = <Icon name="trophy" size={30} color={color.secondary} />;
 
