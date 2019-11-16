@@ -1,6 +1,7 @@
 import { createStackNavigator } from 'react-navigation';
 import { AuthScreen } from '../screens/auth-screen';
-import { ContestsScreen } from '../screens/contests-screen';
+import { ContestsOverviewScreen } from '../screens/contests-overview-screen';
+import { ContestScreen } from '../screens/contest-screen';
 import { color } from '../theme/color';
 
 export const PrimaryNavigator = createStackNavigator(
@@ -12,9 +13,15 @@ export const PrimaryNavigator = createStackNavigator(
       },
     },
     contests: {
-      screen: ContestsScreen,
+      screen: ContestsOverviewScreen,
       navigationOptions: {
         title: 'Your Contests',
+      },
+    },
+    contest: {
+      screen: ContestScreen,
+      navigationOptions: {
+        header: null,
       },
     },
   },

@@ -9,8 +9,11 @@ export const ContestsStoreModel = types
   .props({
     contests: types.array(ContestModel),
     status: types.optional(types.enumeration(['pending', 'loading', 'done', 'error']), 'pending'),
+    token: types.optional(types.string, ''),
   })
-  .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .views(self => ({
+    getContest: (contestId: number) => self.contests.find(contest => contest.id === contestId),
+  })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions(self => ({
     setContests: (contests: ContestSnapshot[]) => {
       self.contests.replace(contests as any);
@@ -18,12 +21,15 @@ export const ContestsStoreModel = types
     setStatus: (status: 'pending' | 'loading' | 'done' | 'error') => {
       self.status = status;
     },
+    setToken: (token: string): void => {
+      self.token = token;
+    },
   }))
   .actions(self => {
     const api: Api = getEnv(self).api;
     return {
-      getContests: userToken => {
-        api.getContests(userToken).then(res => {
+      fetchContests: () => {
+        api.getContests(self.token).then(res => {
           if (res.kind !== 'ok') {
             self.setStatus('error');
           } else {

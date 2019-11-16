@@ -82,22 +82,24 @@ export class Api {
     contestId: number,
     contestPassword: string,
   ): Promise<Types.GetRoundsResult> {
+    console.log('USER TOKEN', userToken, 'PASSSWORD', contestPassword);
     const data = new FormData();
     data.append('password', contestPassword);
 
-    const response: ApiResponse<any> = await this.apisauce.post(`/contest/${contestId}`, data, {
+    const response: ApiResponse<any> = await this.apisauce.post(`/round/${contestId}`, data, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         Authorization: `Bearer ${userToken} `,
       },
     });
+    console.log('RESPONSE', response);
     // the typical ways to die when calling an api
     if (!response.ok) {
       const problem = getGeneralApiProblem(response);
       if (problem) return problem;
     }
 
-    const rounds: RoundSnapshot[] = response.data.results.map(round =>
+    const rounds: RoundSnapshot[] = response.data.map(round =>
       normalizeContestRounds(round, contestId),
     );
 

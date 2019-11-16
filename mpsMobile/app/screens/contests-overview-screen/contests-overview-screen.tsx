@@ -3,12 +3,13 @@ import { observer } from 'mobx-react-lite';
 import { ViewStyle, View, FlatList } from 'react-native';
 import { Screen } from '../../components/screen';
 import { useStores, RootStore } from '../../models/root-store';
-import { NavigationScreenProps } from 'react-navigation';
+import { NavigationScreenProps, NavigationParams } from 'react-navigation';
 import { spacing, color } from '../../theme';
 import { getSnapshot } from 'mobx-state-tree';
 import { ContestCard } from '../../components/contest-card';
+import { ContestSnapshot } from '../../models';
 
-export interface ContestsScreenProps extends NavigationScreenProps<{}> {
+export interface ContestsOverviewScreenProps extends NavigationScreenProps<{}> {
   rootStore: RootStore;
 }
 
@@ -25,11 +26,16 @@ const LIST: ViewStyle = {
   width: '100%',
 };
 
-export const ContestsScreen: React.FunctionComponent<ContestsScreenProps> = observer(props => {
-  const { getContests, user, contests, getContestRounds } = useStores();
+export const ContestsOverviewScreen: React.FunctionComponent<
+  ContestsOverviewScreenProps
+> = observer(props => {
+  const { user, contestsStore } = useStores();
 
   const renderContest = ({ item }) => (
-    <ContestCard contest={item} onPress={() => getContestRounds(item.contestId)} />
+    <ContestCard
+      contest={item}
+      onPress={() => props.navigation.push('contest', { contestId: item.id as any })}
+    />
   );
 
   const sendToLogin = React.useMemo(() => () => props.navigation.navigate('auth'), [
@@ -41,7 +47,7 @@ export const ContestsScreen: React.FunctionComponent<ContestsScreenProps> = obse
       sendToLogin();
     }
     if (user.status === 'success') {
-      getContests();
+      contestsStore.fetchContests();
     }
   }, [user.status]);
 
@@ -50,7 +56,7 @@ export const ContestsScreen: React.FunctionComponent<ContestsScreenProps> = obse
       <Screen style={CONTAINER} preset="fixed" backgroundColor={color.background}>
         <FlatList
           style={LIST}
-          data={getSnapshot(contests)}
+          data={getSnapshot(contestsStore.contests)}
           renderItem={renderContest}
           keyExtractor={item => 'contest' + item.id}
         />

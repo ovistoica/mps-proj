@@ -1,5 +1,6 @@
-import { Instance, SnapshotOut, types } from 'mobx-state-tree';
+import { Instance, SnapshotOut, types, getEnv } from 'mobx-state-tree';
 import { RoundModel, RoundSnapshot } from '../round';
+import { Api } from '../../services/api';
 
 /**
  * Model description here for TypeScript hints.
@@ -14,10 +15,26 @@ export const ContestModel = types
     endTime: types.Date,
     password: types.string,
     rounds: types.optional(types.array(RoundModel), []),
+    status: types.optional(types.enumeration(['success', 'error', 'offline']), 'offline'),
   })
   .actions(self => ({
     setRounds: (rounds: RoundSnapshot[]) => {
       self.rounds.replace(rounds as any);
+    },
+    setStatus: (newStatus: 'success' | 'error' | 'offline') => {
+      self.status = newStatus;
+    },
+  }))
+  .actions(self => ({
+    fetchRounds: (userToken: string) => {
+      const api: Api = getEnv(self).api;
+      api.getContestRounds(userToken, self.id, self.password).then(res => {
+        if (res.kind !== 'ok') {
+          self.setStatus('error');
+        } else {
+          self.setRounds(res.rounds);
+        }
+      });
     },
   }));
 

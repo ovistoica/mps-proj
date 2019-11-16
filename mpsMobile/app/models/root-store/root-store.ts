@@ -13,7 +13,13 @@ export const RootStoreModel = types
   .model('RootStore')
   .props({
     navigationStore: types.optional(NavigationStoreModel, {}),
+    /**
+     * The store responsible for voting and fetching contests from the server
+     */
     contestsStore: types.optional(ContestsStoreModel, {}),
+    /**
+     * The session of the current user
+     */
     user: types.optional(UserModel, {}),
   })
   .actions(self => {
@@ -31,6 +37,7 @@ export const RootStoreModel = types
               status: 'success',
             };
             self.user.setUser(newSignedInUser);
+            self.contestsStore.setToken(newSignedInUser.token);
             self.navigationStore.dispatch(NavigationActions.navigate({ routeName: 'contests' }));
           }
         });
