@@ -37,7 +37,7 @@ export const RootStoreModel = types
               status: 'success',
             };
             self.user.setUser(newSignedInUser);
-            self.contestsStore.setToken(newSignedInUser.token);
+            api.setToken(newSignedInUser.token);
             self.navigationStore.dispatch(NavigationActions.navigate({ routeName: 'contests' }));
           }
         });

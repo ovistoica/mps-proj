@@ -42,7 +42,7 @@ export const ContestModel = types
   .actions(self => ({
     fetchRounds: (userToken: string) => {
       const api: Api = getEnv(self).api;
-      api.getContestRounds(userToken, self.id, self.password).then(res => {
+      api.getContestRounds(self.id, self.password).then(res => {
         if (res.kind !== 'ok') {
           self.setStatus('error');
         } else {

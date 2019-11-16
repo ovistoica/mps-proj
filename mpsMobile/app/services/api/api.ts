@@ -122,7 +122,7 @@ export class Api {
     return { kind: 'ok', rounds };
   }
 
-  async getRoundSeries(roundId: string): Promise<Types.GetSeriesResult> {
+  async getRoundSeries(roundId: number): Promise<Types.GetSeriesResult> {
     const response: ApiResponse<any> = await this.apisauce.get(
       `/series/${roundId}`,
       {},
@@ -138,7 +138,7 @@ export class Api {
     return { kind: 'ok', series };
   }
 
-  async getParticipants(seriesId: string): Promise<Types.GetParticipantsResult> {
+  async getParticipants(seriesId: number): Promise<Types.GetParticipantsResult> {
     const response: ApiResponse<any> = await this.apisauce.get(
       `/participant/${seriesId}`,
       {},

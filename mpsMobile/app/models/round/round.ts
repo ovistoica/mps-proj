@@ -1,4 +1,6 @@
-import { Instance, SnapshotOut, types } from 'mobx-state-tree';
+import { Instance, SnapshotOut, types, getEnv } from 'mobx-state-tree';
+import { SeriesModel, SeriesSnapshot } from '../series';
+import { Api } from '../../services/api';
 
 /**
  * Model description here for TypeScript hints.
@@ -11,9 +13,24 @@ export const RoundModel = types
     startTime: types.string,
     endTime: types.string,
     roundNumber: types.number,
+    series: types.optional(types.array(SeriesModel), []),
   })
   .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .actions(self => ({})); // eslint-disable-line @typescript-eslint/no-unused-vars
+  .actions(self => ({
+    setSeries: (series: SeriesSnapshot[]) => {
+      self.series.replace(series as any);
+    },
+  }))
+  .actions(self => ({
+    fetchSeries: () => {
+      const api: Api = getEnv(self);
+      api.getRoundSeries(self.id).then(res => {
+        if (res.kind === 'ok') {
+          self.setSeries(res.series);
+        }
+      });
+    },
+  }));
 
 /**
   * Un-comment the following to omit model attributes from your snapshots (and from async storage).

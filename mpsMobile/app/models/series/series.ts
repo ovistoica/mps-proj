@@ -1,4 +1,6 @@
-import { Instance, SnapshotOut, types } from 'mobx-state-tree';
+import { Instance, SnapshotOut, types, getEnv } from 'mobx-state-tree';
+import { ParticipantModel, ParticipantSnapshot } from '../participant';
+import { Api } from '../../services/api';
 
 /**
  * Model description here for TypeScript hints.
@@ -10,9 +12,24 @@ export const SeriesModel = types
     startTime: types.string,
     endTime: types.string,
     seriesNumber: types.number,
+    participants: types.optional(types.array(ParticipantModel), []),
   })
   .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .actions(self => ({})); // eslint-disable-line @typescript-eslint/no-unused-vars
+  .actions(self => ({
+    setParticipants: (series: ParticipantSnapshot[]) => {
+      self.participants.replace(series as any);
+    },
+  }))
+  .actions(self => ({
+    fetchSeries: () => {
+      const api: Api = getEnv(self);
+      api.getParticipants(self.id).then(res => {
+        if (res.kind === 'ok') {
+          self.setParticipants(res.participants);
+        }
+      });
+    },
+  }));
 
 /**
   * Un-comment the following to omit model attributes from your snapshots (and from async storage).
