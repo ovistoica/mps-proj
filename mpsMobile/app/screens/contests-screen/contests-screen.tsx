@@ -25,10 +25,12 @@ const LIST: ViewStyle = {
   width: '100%',
 };
 
-const renderContest = ({ item }) => <ContestCard contest={item} />;
-
 export const ContestsScreen: React.FunctionComponent<ContestsScreenProps> = observer(props => {
-  const { getContests, user, contests } = useStores();
+  const { getContests, user, contests, getContestRounds } = useStores();
+
+  const renderContest = ({ item }) => (
+    <ContestCard contest={item} onPress={() => getContestRounds(item.contestId)} />
+  );
 
   const sendToLogin = React.useMemo(() => () => props.navigation.navigate('auth'), [
     props.navigation,

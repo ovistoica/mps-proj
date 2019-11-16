@@ -47,7 +47,7 @@ const CONTEST_NAME: TextStyle = {
 };
 
 const NAME_CONTAINER: ViewStyle = {
-  marginLeft: spacing[3],
+  marginLeft: spacing[6],
   justifyContent: 'flex-start',
   flexDirection: 'row',
   width: 150,
@@ -75,7 +75,6 @@ export function ContestCard(props: ContestCardProps) {
 
       <View>
         <Text style={CONTEST_INFO}>Type: {contest.type} </Text>
-        <Text style={CONTEST_INFO}>Round: {contest.currentRound} </Text>
       </View>
     </TouchableOpacity>
   );

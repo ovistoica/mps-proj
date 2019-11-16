@@ -1,25 +1,19 @@
 import { Instance, SnapshotOut, types } from 'mobx-state-tree';
-import { RoundModel, RoundSnapshot } from '../round';
 
 /**
  * Model description here for TypeScript hints.
  */
-export const ContestModel = types
-  .model('Contest')
+export const RoundModel = types
+  .model('Round')
   .props({
     id: types.number,
-    name: types.string,
-    type: types.string,
+    contestId: types.number,
     startTime: types.Date,
     endTime: types.Date,
-    password: types.string,
-    rounds: types.optional(types.array(RoundModel), []),
+    roundNumber: types.number,
   })
-  .actions(self => ({
-    setRounds: (rounds: RoundSnapshot[]) => {
-      self.rounds.replace(rounds as any);
-    },
-  }));
+  .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .actions(self => ({})); // eslint-disable-line @typescript-eslint/no-unused-vars
 
 /**
   * Un-comment the following to omit model attributes from your snapshots (and from async storage).
@@ -29,7 +23,7 @@ export const ContestModel = types
   *  .postProcessSnapshot(omit(["password", "socialSecurityNumber", "creditCardNumber"]))
   */
 
-type ContestType = Instance<typeof ContestModel>;
-export interface Contest extends ContestType {}
-type ContestSnapshotType = SnapshotOut<typeof ContestModel>;
-export interface ContestSnapshot extends ContestSnapshotType {}
+type RoundType = Instance<typeof RoundModel>;
+export interface Round extends RoundType {}
+type RoundSnapshotType = SnapshotOut<typeof RoundModel>;
+export interface RoundSnapshot extends RoundSnapshotType {}
