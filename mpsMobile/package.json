@@ -175,6 +175,7 @@
       "it": false
     },
     "rules": {
+      "semi": 0,
       "comma-dangle": 0,
       "no-unused-vars": 0,
       "no-undef": 0,
