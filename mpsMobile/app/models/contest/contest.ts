@@ -1,8 +1,6 @@
 import { Instance, SnapshotOut, types, getEnv } from 'mobx-state-tree';
 import { RoundModel, RoundSnapshot } from '../round';
 import { Api } from '../../services/api';
-import { getRoundStatus } from '../../components/round-card';
-
 /**
  * Model description here for TypeScript hints.
  */

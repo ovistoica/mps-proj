@@ -159,6 +159,7 @@ export function ParticipantCard(props: ParticipantCardProps) {
           text="VOTE"
           textStyle={{ color: color.secondary, fontSize: 18, fontWeight: 'bold' }}
           style={{ backgroundColor: color.top }}
+          onPress={props.onPress}
         />
       ) : (
         <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>

@@ -19,7 +19,11 @@ export const RoundModel = types
       'not-loaded',
     ),
   })
-  .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .views(self => ({
+    getSerie: seriesId => {
+      return self.series.find(serie => serie.id === seriesId);
+    },
+  })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions(self => ({
     setSeries: (series: SeriesSnapshot[]) => {
       self.series.replace(series as any);

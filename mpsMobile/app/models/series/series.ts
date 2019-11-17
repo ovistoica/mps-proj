@@ -14,7 +14,11 @@ export const SeriesModel = types
     seriesNumber: types.number,
     participants: types.optional(types.array(ParticipantModel), []),
   })
-  .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .views(self => ({
+    getParticipant: participantId => {
+      return self.participants.find(participant => participant.id === participantId);
+    },
+  })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions(self => ({
     setParticipants: (series: ParticipantSnapshot[]) => {
       self.participants.replace(series as any);

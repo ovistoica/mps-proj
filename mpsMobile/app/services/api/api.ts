@@ -11,6 +11,7 @@ import {
   normalizeParticipant,
 } from '../../utils/contest.utils';
 import { RoundSnapshot, SeriesSnapshot, ParticipantSnapshot } from '../../models';
+import { JuryVote } from '../../screens/voting-screen';
 
 /**
  * Manages all requests to the API.
@@ -157,6 +158,33 @@ export class Api {
     );
 
     return { kind: 'ok', participants };
+  }
+
+  async submitParticipantVote(
+    contestId: number,
+    participantId: number,
+    vote: JuryVote,
+  ): Promise<Types.GetSubmitVoteResult> {
+    const data = new FormData();
+    data.append('contest_id', contestId);
+    data.append('participant_id', participantId);
+    data.append('ritm', vote.rhythm);
+    data.append('coregrafie', vote.choreography);
+    data.append('corectitudine', vote.correctitude);
+    data.append('componentaArtistica', vote.artisticComponent);
+
+    const response: ApiResponse<any> = await this.apisauce.post('/note/', data, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: `Bearer ${this.token} `,
+      },
+    });
+    console.log(response);
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response);
+      if (problem) return problem;
+    }
+    return { kind: 'ok' };
   }
 
   /**

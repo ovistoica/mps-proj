@@ -1,4 +1,6 @@
-import { Instance, SnapshotOut, types } from 'mobx-state-tree';
+import { Instance, SnapshotOut, types, getEnv } from 'mobx-state-tree';
+import { Api } from '../../services/api';
+import { JuryVote } from '../../screens/voting-screen';
 
 /**
  * Model description here for TypeScript hints.
@@ -18,6 +20,16 @@ export const ParticipantModel = types
   .actions(self => ({
     markVoted: () => {
       self.voted = true;
+    },
+  }))
+  .actions(self => ({
+    submitVote: (vote: JuryVote) => {
+      const api: Api = getEnv(self).api;
+      api.submitParticipantVote(self.contestId, self.id, vote).then(res => {
+        if (res.kind === 'ok') {
+          self.markVoted();
+        }
+      });
     },
   })); // eslint-disable-line @typescript-eslint/no-unused-vars
 

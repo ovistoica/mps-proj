@@ -4,6 +4,7 @@ import { ContestsOverviewScreen } from '../screens/contests-overview-screen';
 import { ContestScreen } from '../screens/contest-screen';
 import { RoundScreen } from '../screens/round-screen';
 import { color } from '../theme/color';
+import { VotingScreen } from '../screens/voting-screen';
 
 export const PrimaryNavigator = createStackNavigator(
   {
@@ -27,6 +28,12 @@ export const PrimaryNavigator = createStackNavigator(
     },
     round: {
       screen: RoundScreen,
+      navigationOptions: {
+        header: null,
+      },
+    },
+    vote: {
+      screen: VotingScreen,
       navigationOptions: {
         header: null,
       },

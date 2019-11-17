@@ -8,3 +8,4 @@ export type GetSeriesResult = { kind: 'ok'; series: SeriesSnapshot[] } | General
 export type GetParticipantsResult =
   | { kind: 'ok'; participants: ParticipantSnapshot[] }
   | GeneralApiProblem;
+export type GetSubmitVoteResult = { kind: 'ok' } | GeneralApiProblem;

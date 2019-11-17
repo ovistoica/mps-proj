@@ -66,6 +66,10 @@ export const RoundScreen: React.FunctionComponent<ContestScreenProps> = observer
   }
   const roundSnapshot = getSnapshot(round);
 
+  const onPress = (seriesId: number, participantId: number) => {
+    props.navigation.push('vote', { contestId, roundId, seriesId, participantId });
+  };
+
   const sections: SectionListData<ParticipantSnapshot>[] = roundSnapshot.series.map(seriesItem => {
     const seriesStatus: TimeStatus = getTimeStatus(seriesItem);
     return {
@@ -74,7 +78,13 @@ export const RoundScreen: React.FunctionComponent<ContestScreenProps> = observer
       data: seriesItem.participants as ParticipantSnapshot[],
       title: `Series no. ${seriesItem.seriesNumber}`,
       renderItem: ({ item }: { item: ParticipantSnapshot }) => {
-        return <ParticipantCard participant={item} seriesStatus={seriesStatus} />;
+        return (
+          <ParticipantCard
+            participant={item}
+            seriesStatus={seriesStatus}
+            onPress={() => onPress(seriesItem.id, item.id)}
+          />
+        );
       },
     };
   });
