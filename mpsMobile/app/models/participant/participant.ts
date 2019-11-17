@@ -12,9 +12,14 @@ export const ParticipantModel = types
     startTime: types.string,
     endTime: types.string,
     contestId: types.number,
+    voted: types.boolean,
   })
   .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .actions(self => ({})); // eslint-disable-line @typescript-eslint/no-unused-vars
+  .actions(self => ({
+    markVoted: () => {
+      self.voted = true;
+    },
+  })); // eslint-disable-line @typescript-eslint/no-unused-vars
 
 /**
   * Un-comment the following to omit model attributes from your snapshots (and from async storage).

@@ -30,6 +30,7 @@ export const ContestModel = types
         return startA - startB;
       });
     },
+    getRound: roundId => self.rounds.find(round => round.id === roundId),
   }))
   .actions(self => ({
     setRounds: (rounds: RoundSnapshot[]) => {

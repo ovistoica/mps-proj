@@ -40,7 +40,15 @@ export const ContestScreen: React.FunctionComponent<ContestScreenProps> = observ
     contest.fetchRounds(user.token);
   }, []);
 
-  const renderRound = ({ item }: { item: RoundSnapshot }) => <RoundCard round={item} />;
+  const onPress = (roundId: number): void => {
+    const round = contest.getRound(roundId);
+    if (round) {
+      props.navigation.push('round', { roundId, contestId: id });
+    }
+  };
+  const renderRound = ({ item }: { item: RoundSnapshot }) => (
+    <RoundCard round={item} onPress={() => onPress(item.id)} />
+  );
 
   return (
     <Screen style={ROOT} preset="fixed">

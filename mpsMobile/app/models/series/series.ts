@@ -21,8 +21,8 @@ export const SeriesModel = types
     },
   }))
   .actions(self => ({
-    fetchSeries: () => {
-      const api: Api = getEnv(self);
+    fetchParticipants: () => {
+      const api: Api = getEnv(self).api;
       api.getParticipants(self.id).then(res => {
         if (res.kind === 'ok') {
           self.setParticipants(res.participants);

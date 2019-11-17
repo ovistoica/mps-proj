@@ -98,7 +98,6 @@ export class Api {
     contestId: number,
     contestPassword: string,
   ): Promise<Types.GetRoundsResult> {
-    console.log('USER TOKEN', this.token, 'PASSSWORD', contestPassword);
     const data = new FormData();
     data.append('password', contestPassword);
 
@@ -122,6 +121,10 @@ export class Api {
     return { kind: 'ok', rounds };
   }
 
+  /**
+   * Fetches  all the series for the round
+   * @param roundId the id of  the round
+   */
   async getRoundSeries(roundId: number): Promise<Types.GetSeriesResult> {
     const response: ApiResponse<any> = await this.apisauce.get(
       `/series/${roundId}`,

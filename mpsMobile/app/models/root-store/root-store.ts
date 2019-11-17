@@ -38,12 +38,18 @@ export const RootStoreModel = types
             };
             self.user.setUser(newSignedInUser);
             api.setToken(newSignedInUser.token);
-            self.navigationStore.dispatch(NavigationActions.navigate({ routeName: 'contests' }));
+            self.navigationStore.dispatch(NavigationActions.navigate({ routeName: 'overview' }));
           }
         });
       },
     };
-  });
+  })
+  .actions(self => ({
+    afterCreate() {
+      const api: Api = getEnv(self).api;
+      api.setToken(self.user.token);
+    },
+  }));
 
 /**
  * The RootStore instance.

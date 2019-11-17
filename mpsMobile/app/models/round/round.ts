@@ -14,19 +14,30 @@ export const RoundModel = types
     endTime: types.string,
     roundNumber: types.number,
     series: types.optional(types.array(SeriesModel), []),
+    status: types.optional(
+      types.enumeration(['loading', 'success', 'error', 'not-loaded']),
+      'not-loaded',
+    ),
   })
   .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions(self => ({
     setSeries: (series: SeriesSnapshot[]) => {
       self.series.replace(series as any);
     },
+    setStatus: (status: 'loading' | 'not-loaded' | 'success' | 'error') => {
+      self.status = status;
+    },
   }))
   .actions(self => ({
     fetchSeries: () => {
-      const api: Api = getEnv(self);
+      const api: Api = getEnv(self).api;
       api.getRoundSeries(self.id).then(res => {
-        if (res.kind === 'ok') {
+        if (res.kind !== 'ok') {
+          self.setStatus('error');
+        } else {
           self.setSeries(res.series);
+          self.series.map(serie => serie.fetchParticipants());
+          self.setStatus('success');
         }
       });
     },

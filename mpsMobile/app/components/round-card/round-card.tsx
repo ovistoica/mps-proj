@@ -5,7 +5,7 @@ import { RoundSnapshot } from '../../models';
 import { color, spacing } from '../../theme';
 import { mergeAll, flatten } from 'ramda';
 import moment from 'moment';
-import { RoundStatus, getRoundStatus } from './round.utils';
+import { TimeStatus, getTimeStatus } from '../../utils/contest.utils';
 
 export interface RoundCardProps {
   /**
@@ -66,7 +66,7 @@ export function RoundCard(props: RoundCardProps) {
   const activeRoundContainer = mergeAll(flatten([style, ACTIVE]));
   const inactiveRoundContainer = mergeAll(flatten([style, INACTIVE]));
 
-  const roundStatus = getRoundStatus(round);
+  const roundStatus = getTimeStatus(round);
 
   let roundText: string;
   let displayTime: string;
@@ -129,9 +129,11 @@ export function RoundCard(props: RoundCardProps) {
     </View>
   );
 
-  return roundStatus === 'in-progress'
-    ? renderActiveRound()
-    : roundStatus === 'finished'
-    ? renderEndedRound()
-    : renderInTheFutureRound();
+  // return roundStatus === 'in-progress'
+  //   ? renderActiveRound()
+  //   : roundStatus === 'finished'
+  //   ? renderEndedRound()
+  //   : renderInTheFutureRound();
+
+  return renderActiveRound();
 }

@@ -57,6 +57,7 @@ const CONTINUE_TEXT: TextStyle = {
 };
 const FOOTER: ViewStyle = { backgroundColor: color.background, flex: 0.2 };
 const FOOTER_CONTENT: ViewStyle = {
+  backgroundColor: color.background,
   paddingVertical: spacing[4],
   paddingHorizontal: spacing[4],
 };
@@ -98,7 +99,7 @@ const AuthScreenComponent: React.FunctionComponent<AuthScreenProps> = props => {
   });
   const [loading, setLoading] = useState<boolean>(true);
   const { status } = rootStore.user;
-  const nextScreen = React.useMemo(() => () => props.navigation.navigate('contests'), [
+  const nextScreen = React.useMemo(() => () => props.navigation.navigate('overview'), [
     props.navigation,
   ]);
 
@@ -139,7 +140,7 @@ const AuthScreenComponent: React.FunctionComponent<AuthScreenProps> = props => {
         <FormRow preset={'soloRound'} style={FORM_INPUT}>
           <TextInput
             placeholder="Username"
-            placeholderTextColor={color.dim}
+            placeholderTextColor={color.textMuted}
             style={TEXT_INPUT}
             textContentType="nickname"
             onChangeText={onChangeUsername}
@@ -151,7 +152,7 @@ const AuthScreenComponent: React.FunctionComponent<AuthScreenProps> = props => {
           <TextInput
             placeholder="password"
             style={TEXT_INPUT}
-            placeholderTextColor={color.dim}
+            placeholderTextColor={color.textMuted}
             textContentType="password"
             value={userCredentials.password}
             onChangeText={onPasswordChange}
