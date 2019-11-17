@@ -98,7 +98,7 @@ export const VotingScreen: React.FunctionComponent<VotingScreenProps> = observer
   };
 
   const onPress = () => {
-    if (canSubmitVote()) {
+    if (canSubmitVote() && !error) {
       participant.submitVote(vote);
       props.navigation.pop();
     }

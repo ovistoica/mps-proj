@@ -162,8 +162,17 @@ export function ParticipantCard(props: ParticipantCardProps) {
           onPress={props.onPress}
         />
       ) : (
-        <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
-          <Text style={{ color: color.textMuted, fontSize: 18, fontWeight: 'bold' }}>VOTED</Text>
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'row',
+            margin: 10,
+          }}
+        >
+          <Text style={{ color: color.palette.darkGreen, fontSize: 18, fontWeight: 'bold' }}>
+            VOTED
+          </Text>
         </View>
       )}
     </View>
