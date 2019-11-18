@@ -42,6 +42,13 @@ class ParticipantSerializer(ModelSerializer):
         model = Participant
         fields = ['id', 'first_name', 'last_name', 'start_time', 'end_time', 'vote']
 
+        
+
+class ParticipantRezSerializer(ModelSerializer):
+
+    class Meta:
+        model = Participant
+        fields = ['id', 'first_name', 'last_name', 'nota', 'status']
 
 class GradeSerializer(ModelSerializer):
 

@@ -140,32 +140,6 @@
     }
 },
 {
-    "model": "api.participant",
-    "pk": 1,
-    "fields": {
-        "first_name": "Floricia",
-        "last_name": "Dansatoarea",
-        "start_time": "2019-11-05T17:20:51Z",
-        "end_time": "2019-11-05T20:20:53Z",
-        "round": [
-            1
-        ]
-    }
-},
-{
-    "model": "api.participant",
-    "pk": 2,
-    "fields": {
-        "first_name": "Florinel",
-        "last_name": "de la Galati",
-        "start_time": "2019-11-05T20:21:48Z",
-        "end_time": "2019-11-05T21:21:53Z",
-        "round": [
-            1
-        ]
-    }
-},
-{
     "model": "auth.permission",
     "pk": 1,
     "fields": {
