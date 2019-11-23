@@ -1,18 +1,55 @@
-import { Instance, SnapshotOut, types } from 'mobx-state-tree';
-
+import { Instance, SnapshotOut, types, getEnv } from 'mobx-state-tree';
+import { RoundModel, RoundSnapshot } from '../round';
+import { Api } from '../../services/api';
 /**
  * Model description here for TypeScript hints.
  */
-export const ContestModel = types.model('Contest').props({
-  id: types.number,
-  name: types.string,
-  type: types.string,
-  numberOfRounds: types.number,
-  currentRound: types.number,
-  startTime: types.Date,
-  endTime: types.Date,
-  password: types.string,
-});
+export const ContestModel = types
+  .model('Contest')
+  .props({
+    id: types.number,
+    name: types.string,
+    type: types.string,
+    startTime: types.Date,
+    endTime: types.Date,
+    password: types.string,
+    rounds: types.optional(types.array(RoundModel), []),
+    status: types.optional(types.enumeration(['success', 'error', 'offline']), 'offline'),
+  })
+  .views(self => ({
+    /**
+     * Get the ordered rounds by start time
+     */
+    get orderedRounds(): RoundSnapshot[] {
+      return self.rounds.sort((a, b) => {
+        const startA = Date.parse(a.startTime);
+        const startB = Date.parse(b.startTime);
+
+        return startA - startB;
+      });
+    },
+    getRound: roundId => self.rounds.find(round => round.id === roundId),
+  }))
+  .actions(self => ({
+    setRounds: (rounds: RoundSnapshot[]) => {
+      self.rounds.replace(rounds as any);
+    },
+    setStatus: (newStatus: 'success' | 'error' | 'offline') => {
+      self.status = newStatus;
+    },
+  }))
+  .actions(self => ({
+    fetchRounds: (userToken: string) => {
+      const api: Api = getEnv(self).api;
+      api.getContestRounds(self.id, self.password).then(res => {
+        if (res.kind !== 'ok') {
+          self.setStatus('error');
+        } else {
+          self.setRounds(res.rounds);
+        }
+      });
+    },
+  }));
 
 /**
   * Un-comment the following to omit model attributes from your snapshots (and from async storage).

@@ -1,7 +1,10 @@
 import { createStackNavigator } from 'react-navigation';
 import { AuthScreen } from '../screens/auth-screen';
-import { ContestsScreen } from '../screens/contests-screen';
+import { ContestsOverviewScreen } from '../screens/contests-overview-screen';
+import { ContestScreen } from '../screens/contest-screen';
+import { RoundScreen } from '../screens/round-screen';
 import { color } from '../theme/color';
+import { VotingScreen } from '../screens/voting-screen';
 
 export const PrimaryNavigator = createStackNavigator(
   {
@@ -11,21 +14,39 @@ export const PrimaryNavigator = createStackNavigator(
         header: null,
       },
     },
-    contests: {
-      screen: ContestsScreen,
+    overview: {
+      screen: ContestsOverviewScreen,
       navigationOptions: {
         title: 'Your Contests',
+      },
+    },
+    contest: {
+      screen: ContestScreen,
+      navigationOptions: {
+        header: null,
+      },
+    },
+    round: {
+      screen: RoundScreen,
+      navigationOptions: {
+        header: null,
+      },
+    },
+    vote: {
+      screen: VotingScreen,
+      navigationOptions: {
+        header: null,
       },
     },
   },
   {
     headerMode: 'screen',
-    initialRouteName: 'contests',
+    initialRouteName: 'overview',
     defaultNavigationOptions: {
       headerStyle: {
-        backgroundColor: color.primaryDarker,
+        backgroundColor: color.primary,
       },
-      headerTintColor: color.text,
+      headerTintColor: color.textInverted,
       headerTitleStyle: {
         fontWeight: 'bold',
         textAlign: 'center',
@@ -41,4 +62,4 @@ export const PrimaryNavigator = createStackNavigator(
  * Anything not on this list will be a standard `back` action in
  * react-navigation.
  */
-export const exitRoutes: string[] = ['auth'];
+export const exitRoutes: string[] = ['auth', 'overview'];

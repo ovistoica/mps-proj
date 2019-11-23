@@ -53,9 +53,11 @@ const CONTINUE_TEXT: TextStyle = {
   ...BOLD,
   fontSize: 13,
   letterSpacing: 2,
+  color: color.textInverted,
 };
 const FOOTER: ViewStyle = { backgroundColor: color.background, flex: 0.2 };
 const FOOTER_CONTENT: ViewStyle = {
+  backgroundColor: color.background,
   paddingVertical: spacing[4],
   paddingHorizontal: spacing[4],
 };
@@ -65,6 +67,7 @@ const FORM_INPUT: ViewStyle = {
   flexDirection: 'row',
   alignItems: 'center',
   marginTop: 20,
+  backgroundColor: color.top,
 };
 
 const TEXT_INPUT: TextStyle = {
@@ -96,7 +99,7 @@ const AuthScreenComponent: React.FunctionComponent<AuthScreenProps> = props => {
   });
   const [loading, setLoading] = useState<boolean>(true);
   const { status } = rootStore.user;
-  const nextScreen = React.useMemo(() => () => props.navigation.navigate('contests'), [
+  const nextScreen = React.useMemo(() => () => props.navigation.navigate('overview'), [
     props.navigation,
   ]);
 
@@ -128,7 +131,7 @@ const AuthScreenComponent: React.FunctionComponent<AuthScreenProps> = props => {
   };
 
   return loading ? (
-    <ActivityIndicator size="large" color={color.primary}/>
+    <ActivityIndicator size="large" color={color.primary} />
   ) : (
     <View testID="WelcomeScreen" style={FULL}>
       <Screen style={CONTAINER} preset="scroll" backgroundColor={color.background}>
@@ -137,7 +140,7 @@ const AuthScreenComponent: React.FunctionComponent<AuthScreenProps> = props => {
         <FormRow preset={'soloRound'} style={FORM_INPUT}>
           <TextInput
             placeholder="Username"
-            placeholderTextColor={color.dim}
+            placeholderTextColor={color.textMuted}
             style={TEXT_INPUT}
             textContentType="nickname"
             onChangeText={onChangeUsername}
@@ -149,7 +152,7 @@ const AuthScreenComponent: React.FunctionComponent<AuthScreenProps> = props => {
           <TextInput
             placeholder="password"
             style={TEXT_INPUT}
-            placeholderTextColor={color.dim}
+            placeholderTextColor={color.textMuted}
             textContentType="password"
             value={userCredentials.password}
             onChangeText={onPasswordChange}
