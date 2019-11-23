@@ -24,9 +24,9 @@ export const ParticipantModel = types
     },
   }))
   .actions(self => ({
-    submitVote: (vote: JuryVote) => {
+    submitVote: (vote: JuryVote, contestId: number) => {
       const api = self.environment.api;
-      api.submitParticipantVote(self.contestId, self.id, vote).then(res => {
+      api.submitParticipantVote(contestId, self.id, vote).then(res => {
         if (res.kind === 'ok') {
           self.markVoted();
         }

@@ -71,7 +71,7 @@ export class Api {
    * Requests all contests that the user will vote on
    */
   async getContests(): Promise<Types.GetContestsResult> {
-    const response: ApiResponse<any> = await this.apisauce.get('/contest');
+    const response: ApiResponse<any> = await this.apisauce.get('/contest/');
     if (!response.ok) {
       const problem = getGeneralApiProblem(response);
       if (problem) return problem;
