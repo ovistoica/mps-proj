@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import { ViewStyle, View, FlatList } from 'react-native';
 import { Screen } from '../../components/screen';
 import { useStores, RootStore } from '../../models/root-store';
-import { NavigationScreenProps, NavigationParams } from 'react-navigation';
+import { NavigationScreenProps } from 'react-navigation';
 import { spacing, color } from '../../theme';
 import { getSnapshot } from 'mobx-state-tree';
 import { ContestCard } from '../../components/contest-card';
@@ -29,7 +29,7 @@ const LIST: ViewStyle = {
 export const ContestsOverviewScreen: React.FunctionComponent<
   ContestsOverviewScreenProps
 > = observer(props => {
-  const { user, contestsStore } = useStores();
+  const { user, contestsStore, navigationStore } = useStores();
 
   const renderContest = ({ item }: { item: ContestSnapshot }) => (
     <ContestCard
@@ -38,10 +38,7 @@ export const ContestsOverviewScreen: React.FunctionComponent<
     />
   );
 
-  const sendToLogin = React.useMemo(() => () => props.navigation.navigate('auth'), [
-    props.navigation,
-  ]);
-
+  const sendToLogin = React.useCallback(() => navigationStore.navigateTo('auth'), []);
   React.useEffect(() => {
     if (user.status === 'offline' || user.status === 'error') {
       sendToLogin();

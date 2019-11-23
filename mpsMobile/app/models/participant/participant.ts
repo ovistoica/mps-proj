@@ -1,6 +1,6 @@
-import { Instance, SnapshotOut, types, getEnv } from 'mobx-state-tree';
-import { Api } from '../../services/api';
+import { Instance, SnapshotOut, types } from 'mobx-state-tree';
 import { JuryVote } from '../../screens/voting-screen';
+import { withEnvironment } from '../extensions';
 
 /**
  * Model description here for TypeScript hints.
@@ -16,6 +16,7 @@ export const ParticipantModel = types
     contestId: types.number,
     voted: types.boolean,
   })
+  .extend(withEnvironment)
   .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions(self => ({
     markVoted: () => {
@@ -24,7 +25,7 @@ export const ParticipantModel = types
   }))
   .actions(self => ({
     submitVote: (vote: JuryVote) => {
-      const api: Api = getEnv(self).api;
+      const api = self.environment.api;
       api.submitParticipantVote(self.contestId, self.id, vote).then(res => {
         if (res.kind === 'ok') {
           self.markVoted();

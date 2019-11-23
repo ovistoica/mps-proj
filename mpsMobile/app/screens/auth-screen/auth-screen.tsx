@@ -91,17 +91,18 @@ export interface AuthScreenProps extends NavigationScreenProps<{}> {
 }
 
 const AuthScreenComponent: React.FunctionComponent<AuthScreenProps> = props => {
-  const rootStore = useStores();
+  const { user, login, navigationStore } = useStores();
 
   const [userCredentials, setUserCredentials] = useState<UserCredentials>({
     username: '',
     password: '',
   });
   const [loading, setLoading] = useState<boolean>(true);
-  const { status } = rootStore.user;
-  const nextScreen = React.useMemo(() => () => props.navigation.navigate('overview'), [
-    props.navigation,
-  ]);
+  const { status } = user;
+  // const nextScreen = React.useMemo(() => () => props.navigation.navigate('overview'), [
+  //   props.navigation,
+  // ]);
+  const nextScreen = () => navigationStore.navigateTo('overview');
 
   useEffect(() => {
     if (status === 'success') {
@@ -111,7 +112,7 @@ const AuthScreenComponent: React.FunctionComponent<AuthScreenProps> = props => {
   }, [status]);
 
   const onLoginPress = () => {
-    rootStore.login(userCredentials);
+    login(userCredentials);
   };
 
   const onChangeUsername = (username: string): void => {

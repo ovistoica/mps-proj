@@ -12,10 +12,10 @@ const localApiConfig: ApiConfig = {
 };
 
 export class Environment {
-  constructor() {
+  constructor(apiConfig: ApiConfig) {
     // create each service
     this.reactotron = new Reactotron();
-    this.api = new Api(localApiConfig);
+    this.api = new Api(apiConfig || localApiConfig);
   }
 
   async setup() {

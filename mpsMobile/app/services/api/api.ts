@@ -56,23 +56,22 @@ export class Api {
       timeout: this.config.timeout,
       headers: {
         Accept: 'application/json',
+        'Access-Control-Allow-Origin': '*',
       },
     });
   }
 
   setToken(userToken: string) {
     this.token = userToken;
+    this.apisauce.setHeader('Authorization', 'Bearer ' + userToken);
+    this.apisauce.setHeader('Content-Type', 'application/x-www-form-urlencoded');
   }
 
   /**
    * Requests all contests that the user will vote on
    */
   async getContests(): Promise<Types.GetContestsResult> {
-    const response: ApiResponse<any> = await this.apisauce.get(
-      '/contest',
-      {},
-      { headers: { Authorization: `Bearer ${this.token}` } },
-    );
+    const response: ApiResponse<any> = await this.apisauce.get('/contest');
     if (!response.ok) {
       const problem = getGeneralApiProblem(response);
       if (problem) return problem;
