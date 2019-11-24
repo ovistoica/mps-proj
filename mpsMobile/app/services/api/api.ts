@@ -231,4 +231,6 @@ export class Api {
     });
     this.setToken(null);
   }
+
+  async getContestResults(): Promise<Types.GetResults> {}
 }

@@ -1,7 +1,10 @@
-import { ContestsStoreModel, ContestsStore } from "./contests-store"
+import { ContestsStoreModel, ContestsStore } from './contests-store';
 
-test("can be created", () => {
-  const instance: ContestsStore = ContestsStoreModel.create({})
+it('can be created', () => {
+  const instance: ContestsStore = ContestsStoreModel.create({
+    contests: [],
+    status: 'pending',
+  });
 
-  expect(instance).toBeTruthy()
-})
+  expect(instance).toBeTruthy();
+});

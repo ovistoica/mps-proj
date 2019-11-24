@@ -9,3 +9,4 @@ export type GetParticipantsResult =
   | { kind: 'ok'; participants: ParticipantSnapshot[] }
   | GeneralApiProblem;
 export type GetSubmitVoteResult = { kind: 'ok' } | GeneralApiProblem;
+export type GetResults = {}
