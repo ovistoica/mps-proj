@@ -8,6 +8,8 @@ import { spacing, color } from '../../theme';
 import { getSnapshot } from 'mobx-state-tree';
 import { ContestCard } from '../../components/contest-card';
 import { ContestSnapshot } from '../../models';
+import { Text } from '../../components/text';
+import { Button } from '../../components/button';
 
 export interface ContestsOverviewScreenProps extends NavigationScreenProps<{}> {
   rootStore: RootStore;
@@ -29,7 +31,7 @@ const LIST: ViewStyle = {
 export const ContestsOverviewScreen: React.FunctionComponent<
   ContestsOverviewScreenProps
 > = observer(props => {
-  const { user, contestsStore, navigationStore } = useStores();
+  const { user, contestsStore, navigationStore, logout } = useStores();
 
   const renderContest = ({ item }: { item: ContestSnapshot }) => (
     <ContestCard
@@ -51,6 +53,18 @@ export const ContestsOverviewScreen: React.FunctionComponent<
   return (
     <View testID="ContestsScreen" style={FULL}>
       <Screen style={CONTAINER} preset="fixed" backgroundColor={color.background}>
+        <View style={{ position: 'absolute', top: 5, right: 15 }}>
+          <Text preset="default">
+            Hello{' '}
+            <Text style={{ color: color.primaryDarker, fontWeight: 'bold' }}>{user.name}</Text>
+          </Text>
+          <Button
+            style={{ marginTop: 5, backgroundColor: color.top, width: 80, alignSelf: 'center' }}
+            textStyle={{ color: color.text }}
+            text="Sign Out"
+            onPress={logout}
+          />
+        </View>
         <FlatList
           style={LIST}
           data={getSnapshot(contestsStore.contests)}

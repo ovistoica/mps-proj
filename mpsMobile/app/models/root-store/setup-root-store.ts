@@ -1,4 +1,4 @@
-import { onSnapshot } from 'mobx-state-tree';
+import { onSnapshot, getSnapshot } from 'mobx-state-tree';
 import { RootStoreModel, RootStore } from './root-store';
 import { Environment } from '../environment';
 import * as storage from '../../utils/storage';
@@ -48,6 +48,7 @@ export async function setupRootStore(apiConfig: ApiConfig) {
   if (__DEV__) {
     env.reactotron.setRootStore(rootStore, data);
   }
+  storage.save('DEFAULT_STATE', getSnapshot(rootStore));
 
   // track changes & save to storage
   onSnapshot(rootStore, snapshot => storage.save(ROOT_STATE_STORAGE_KEY, snapshot));

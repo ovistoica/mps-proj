@@ -214,4 +214,21 @@ export class Api {
       return { kind: 'ok', token, email };
     }
   }
+
+  async logout(): Promise<void> {
+    const data = new FormData();
+    data.append('token', this.token);
+    data.append('client_id', '36jJ6SE8lVSkfeT9loQ7nii5b17szZDIL8Y82WFi');
+    data.append(
+      'client_secret',
+      '5C2iKsLzRlkwnkulqFgmvf4rkdECDHlVpMV50nJhNltzCDcz5DFV4bybz523uN5hASKxQoqomzvjzoiVw34KyZVUCWDVt6GoSnSlJhuoSQmhi76J99WE8GwpXl14p2YX',
+    );
+    await this.apisauce.post('/auth/revoke_token/', data, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: 'Bearer ' + this.token,
+      },
+    });
+    this.setToken(null);
+  }
 }

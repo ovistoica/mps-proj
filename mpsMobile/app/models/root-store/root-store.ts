@@ -1,11 +1,13 @@
-import { Instance, SnapshotOut, types, getEnv } from 'mobx-state-tree';
+import { Instance, SnapshotOut, types, getEnv, applySnapshot } from 'mobx-state-tree';
 import { NavigationStoreModel } from '../../navigation/navigation-store';
 import { UserModel, UserSnapshot } from '../user';
 import { ContestsStoreModel } from '../contests-store';
 import { Api } from '../../services/api';
 import { UserCredentials } from '../../screens/auth-screen';
 import { NavigationActions } from 'react-navigation';
+import { withEnvironment } from '../extensions';
 
+import * as storage from '../../utils/storage';
 /**
  * A RootStore model.
  */
@@ -22,8 +24,9 @@ export const RootStoreModel = types
      */
     user: types.optional(UserModel, {}),
   })
+  .extend(withEnvironment)
   .actions(self => {
-    const api: Api = getEnv(self).api;
+    const api = self.environment.api;
     return {
       login: (userCredentials: UserCredentials) => {
         api.login(userCredentials).then(res => {
@@ -41,6 +44,11 @@ export const RootStoreModel = types
             self.navigationStore.dispatch(NavigationActions.navigate({ routeName: 'overview' }));
           }
         });
+      },
+      logout: async () => {
+        await api.logout();
+        const snapshot: RootStoreSnapshot = await storage.load('DEFAULT_STATE');
+        applySnapshot(self, snapshot);
       },
     };
   })
