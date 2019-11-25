@@ -9,9 +9,12 @@ import {
   normalizeContestRounds,
   normalizeRoundSeries,
   normalizeParticipant,
+  normalizeContestantResult,
 } from '../../utils/contest.utils';
 import { RoundSnapshot, SeriesSnapshot, ParticipantSnapshot } from '../../models';
 import { JuryVote } from '../../screens/voting-screen';
+import { isNumberLiteralTypeAnnotation } from '@babel/types';
+import { ContestantResultSnapshot } from '../../models/contestant-result';
 
 /**
  * Manages all requests to the API.
@@ -232,5 +235,18 @@ export class Api {
     this.setToken(null);
   }
 
-  async getContestResults(): Promise<Types.GetResults> {}
+  async getContestResults(contestId: number): Promise<Types.GetResults> {
+    const response: ApiResponse<any> = await this.apisauce.get(`/rezultat/${contestId}`);
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response);
+      if (problem) return problem;
+    }
+    const results: ContestantResultSnapshot[] = response.data.map(result =>
+      normalizeContestantResult(result),
+    );
+    return {
+      kind: 'ok',
+      results,
+    };
+  }
 }

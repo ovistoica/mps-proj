@@ -43,6 +43,7 @@ export const ContestScreen: React.FunctionComponent<ContestScreenProps> = observ
   const onPress = (roundId: number): void => {
     const round = contest.getRound(roundId);
     if (round) {
+      contest.setCurrentRoundId(round.id);
       props.navigation.push('round', { roundId, contestId: id });
     }
   };

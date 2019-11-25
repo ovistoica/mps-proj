@@ -33,6 +33,16 @@ export const SeriesModel = types
         }
       });
     },
+  }))
+  .views(self => ({
+    get voted() {
+      for (var i = 0; i < self.participants.length; ++i) {
+        if (!self.participants[i].voted) {
+          return false;
+        }
+      }
+      return true;
+    },
   }));
 
 /**

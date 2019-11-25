@@ -6,6 +6,7 @@ import { Icon } from '../icon';
 import { Text } from '../text';
 import { spacing } from '../../theme';
 import { translate } from '../../i18n/';
+import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 
 // static styles
 const ROOT: ViewStyle = {
@@ -38,7 +39,7 @@ export const Header: React.FunctionComponent<HeaderProps> = props => {
   const header = headerText || (headerTx && translate(headerTx)) || '';
 
   return (
-    <View style={{ ...ROOT, ...style }}>
+    <View style={{ ...ROOT, ...style, paddingTop: getStatusBarHeight() }}>
       {leftIcon ? (
         <Button preset="link" onPress={onLeftPress}>
           <Icon icon={leftIcon} />

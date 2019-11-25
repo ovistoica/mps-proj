@@ -1,6 +1,7 @@
 import { Instance, SnapshotOut, types, getEnv } from 'mobx-state-tree';
 import { RoundModel, RoundSnapshot } from '../round';
 import { Api } from '../../services/api';
+import { ContestResulsModel } from '../contest-resuls';
 /**
  * Model description here for TypeScript hints.
  */
@@ -10,11 +11,13 @@ export const ContestModel = types
     id: types.number,
     name: types.string,
     type: types.string,
-    startTime: types.Date,
-    endTime: types.Date,
+    startTime: types.string,
+    endTime: types.string,
     password: types.string,
     rounds: types.optional(types.array(RoundModel), []),
     status: types.optional(types.enumeration(['success', 'error', 'offline']), 'offline'),
+    results: types.maybeNull(ContestResulsModel),
+    currentRoundId: types.maybeNull(types.number),
   })
   .views(self => ({
     /**
@@ -28,7 +31,12 @@ export const ContestModel = types
         return startA - startB;
       });
     },
-    getRound: roundId => self.rounds.find(round => round.id === roundId),
+    getRound: (roundId: number) => self.rounds.find(round => round.id === roundId),
+  }))
+  .views(self => ({
+    get currentRound() {
+      return self.getRound(self.currentRoundId);
+    },
   }))
   .actions(self => ({
     setRounds: (rounds: RoundSnapshot[]) => {
@@ -36,6 +44,9 @@ export const ContestModel = types
     },
     setStatus: (newStatus: 'success' | 'error' | 'offline') => {
       self.status = newStatus;
+    },
+    setCurrentRoundId: (roundId: number) => {
+      self.currentRoundId = roundId;
     },
   }))
   .actions(self => ({
@@ -47,6 +58,16 @@ export const ContestModel = types
         } else {
           self.setRounds(res.rounds);
         }
+      });
+    },
+    afterCreate: () => {
+      if (!self.currentRoundId) {
+        self.currentRoundId = 1;
+      }
+      self.results = ContestResulsModel.create({
+        contestId: self.id,
+        currentRound: self.currentRoundId,
+        results: [],
       });
     },
   }));

@@ -5,6 +5,7 @@ import { TimeStatus } from '../../utils/contest.utils';
 import moment from 'moment';
 import { SeriesSnapshot } from '../../models';
 import { color } from '../../theme';
+import { Button } from '../button';
 
 export interface SectionTitleProps {
   /**
@@ -63,6 +64,7 @@ export function SectionTitle(props: SectionTitleProps) {
       >
         {roundText}
       </Text>
+      <Button text="See Results" textStyle={{ color: color.textInverted }} />
     </View>
   );
 }

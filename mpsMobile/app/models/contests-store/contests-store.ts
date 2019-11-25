@@ -7,11 +7,14 @@ import { Api } from '../../services/api';
 export const ContestsStoreModel = types
   .model('ContestsStore')
   .props({
-    contests: types.array(ContestModel),
+    contests: types.optional(types.array(ContestModel), []),
     status: types.optional(types.enumeration(['pending', 'loading', 'done', 'error']), 'pending'),
+    currentContestId: types.maybeNull(types.number),
   })
   .views(self => ({
-    getContest: (contestId: number) => self.contests.find(contest => contest.id === contestId),
+    getContest(contestId: number) {
+      return self.contests.find(contest => contest.id === contestId);
+    },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions(self => ({
     setContests: (contests: ContestSnapshot[]) => {
@@ -19,6 +22,9 @@ export const ContestsStoreModel = types
     },
     setStatus: (status: 'pending' | 'loading' | 'done' | 'error') => {
       self.status = status;
+    },
+    setCurrentContestId: (contestId: number) => {
+      self.currentContestId = contestId;
     },
   }))
   .actions(self => {
@@ -34,7 +40,12 @@ export const ContestsStoreModel = types
         });
       },
     };
-  });
+  })
+  .views(self => ({
+    get currentContest() {
+      return self.getContest(self.currentContestId);
+    },
+  }));
 /**
   * Un-comment the following to omit model attributes from your snapshots (and from async storage).
   * Useful for sensitive data like passwords, or transitive state like whether a modal is open.
