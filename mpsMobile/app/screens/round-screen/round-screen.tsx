@@ -101,7 +101,7 @@ export const RoundScreen: React.FunctionComponent<ContestScreenProps> = observer
             text="View Results"
             textStyle={{ color: color.textInverted, fontSize: 18, fontWeight: 'bold' }}
             style={{ flex: 2, alignSelf: 'center' }}
-            onPress={() => navigationStore.navigateTo('results')}
+            onPress={() => navigationStore.navigateTo('results', {})}
           />
         }
       />
