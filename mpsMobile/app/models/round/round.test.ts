@@ -8,7 +8,7 @@ test('can be created', () => {
     id: 2,
     roundNumber: 2,
     series: [],
-    status: 'success',
+    finished: false,
   });
 
   expect(instance).toBeTruthy();
