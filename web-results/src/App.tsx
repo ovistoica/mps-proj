@@ -9,6 +9,7 @@ const App: React.FC = () => {
   let err: boolean = false;
   React.useEffect(() => {
     api = new Api(conf);
+    api.setup();
     const login = async () => {
       const res = await api.login({
         username: "Neny",

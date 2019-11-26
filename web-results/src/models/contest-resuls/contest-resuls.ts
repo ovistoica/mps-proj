@@ -15,25 +15,25 @@ export const ContestResulsModel = types
   .extend(withEnvironment)
   .extend(withStatus)
   .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .actions(self => ({
-    setResults: (results: ContestantResultSnapshot[]) => {
-      self.results.replace(results as any);
-    },
-  }))
-  .actions(self => ({
-    getCurrentResults: async () => {
-      const api = self.environment.api;
-      self.setStatus('pending');
-      api.getContestResults(self.contestId).then(res => {
-        if (res.kind !== 'ok') {
-          self.setStatus('error');
-        } else {
-          self.setResults(res.results);
-          self.setStatus('done');
-        }
-      });
-    },
-  })); // eslint-disable-line @typescript-eslint/no-unused-vars
+  // .actions(self => ({
+  //   setResults: (results: ContestantResultSnapshot[]) => {
+  //     self.results.replace(results as any);
+  //   },
+  // }))
+  // .actions(self => ({
+  //   getCurrentResults: async () => {
+  //     const api = self.environment.api;
+  //     self.setStatus('pending');
+  //     api.getContestResults(self.contestId).then(res => {
+  //       if (res.kind !== 'ok') {
+  //         self.setStatus('error');
+  //       } else {
+  //         self.setResults(res.results);
+  //         self.setStatus('done');
+  //       }
+  //     });
+  //   },
+  // })); // eslint-disable-line @typescript-eslint/no-unused-vars
 
 /**
   * Un-comment the following to omit model attributes from your snapshots (and from async storage).
