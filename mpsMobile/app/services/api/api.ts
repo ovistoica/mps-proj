@@ -13,7 +13,6 @@ import {
 } from '../../utils/contest.utils';
 import { RoundSnapshot, SeriesSnapshot, ParticipantSnapshot } from '../../models';
 import { JuryVote } from '../../screens/voting-screen';
-import { isNumberLiteralTypeAnnotation } from '@babel/types';
 import { ContestantResultSnapshot } from '../../models/contestant-result';
 
 /**

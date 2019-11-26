@@ -68,7 +68,7 @@ export function ResultCard(props: ResultCardProps) {
         <View style={ICON_CONTAINER}>{personIcon}</View>
         <Text style={PARTICIPANT}>{result.firstName} </Text>
         <Text style={PARTICIPANT}>{result.lastName}</Text>
-        {winner && <View>{trophyIcon}</View>}
+        {winner && <View style={ICON_CONTAINER}>{trophyIcon}</View>}
       </View>
       <View style={CARD_TITLE}>
         <Text style={PARTICIPANT}> GRADE: {result.grade}</Text>

@@ -33,10 +33,18 @@ export const ResultsScreen: React.FunctionComponent<ResultsScreenProps> = observ
   const { contestsStore, navigationStore } = useStores();
   const currentContest = contestsStore.currentContest;
 
+  if (!currentContest) {
+    return (
+      <Screen style={ROOT} preset="fixed">
+        <Text preset="header">Something went wrong. Restart the app</Text>
+      </Screen>
+    );
+  }
+
   React.useEffect(() => {
     currentContest.results.getCurrentResults();
-  });
-  const round = contestsStore.currentContest.currentRound;
+  }, []);
+  const round = currentContest.currentRound;
 
   const data: ContestantResultSnapshot[] = getSnapshot(currentContest.results.results);
   const isLastRound = round.id === currentContest.lastRound.id;
