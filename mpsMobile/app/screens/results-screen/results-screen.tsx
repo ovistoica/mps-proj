@@ -5,11 +5,14 @@ import { Text } from '../../components/text';
 import { Screen } from '../../components/screen';
 import { useStores } from '../../models/root-store';
 import { color } from '../../theme';
-import { NavigationScreenProps } from 'react-navigation';
+import { NavigationScreenProps, FlatList } from 'react-navigation';
 import { Button } from '../../components/button';
 import { ResultCard } from '../../components/result-card';
 import { Header } from '../../components/header';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
+import { getSnapshot } from 'mobx-state-tree';
+import { ContestantResultSnapshot } from '../../models/contestant-result';
+
 export interface ResultsScreenProps extends NavigationScreenProps<{}> {}
 
 const ROOT: ViewStyle = {
@@ -34,10 +37,19 @@ export const ResultsScreen: React.FunctionComponent<ResultsScreenProps> = observ
     currentContest.results.getCurrentResults();
   });
   const round = contestsStore.currentContest.currentRound;
+
+  const data: ContestantResultSnapshot[] = getSnapshot(currentContest.results.results);
+
+  const renderItem = ({ item }: { item: ContestantResultSnapshot }) => <ResultCard result={item} />;
+
   return (
     <Screen style={ROOT} preset="scroll">
-      <Header headerText={`Results for Round: ${round.roundNumber}`} />
-      <Text>Results for {round.roundNumber}</Text>
+      <Header
+        headerText={`Results for Round ${round.roundNumber}`}
+        style={HEADER}
+        titleStyle={TITLE}
+      />
+      <FlatList<ContestantResultSnapshot> data={data} renderItem={renderItem} />
       <Button
         text="Back to rounds"
         textStyle={{ color: color.textInverted, fontSize: 16 }}
