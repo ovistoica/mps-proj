@@ -2,7 +2,6 @@ import * as React from 'react';
 import { View, ViewStyle } from 'react-native';
 import { Text } from '../text';
 import { TimeStatus } from '../../utils/contest.utils';
-import moment from 'moment';
 import { SeriesSnapshot } from '../../models';
 import { color } from '../../theme';
 
@@ -31,7 +30,6 @@ export interface SectionTitleProps {
 export function SectionTitle(props: SectionTitleProps) {
   // grab the props
   const { style, series, sectionStatus } = props;
-  const textStyle = {};
 
   let roundText: string;
   switch (sectionStatus) {

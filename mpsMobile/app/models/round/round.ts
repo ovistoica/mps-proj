@@ -1,6 +1,6 @@
-import { Instance, SnapshotOut, types, getEnv } from 'mobx-state-tree';
+import { Instance, SnapshotOut, types } from 'mobx-state-tree';
 import { SeriesModel, SeriesSnapshot } from '../series';
-import { Api } from '../../services/api';
+import { withEnvironment, withStatus } from '../extensions';
 
 /**
  * Model description here for TypeScript hints.
@@ -14,36 +14,46 @@ export const RoundModel = types
     endTime: types.string,
     roundNumber: types.number,
     series: types.optional(types.array(SeriesModel), []),
-    status: types.optional(
-      types.enumeration(['loading', 'success', 'error', 'not-loaded']),
-      'not-loaded',
-    ),
+    finished: types.optional(types.boolean, false),
   })
+  .extend(withEnvironment)
+  .extend(withStatus)
   .views(self => ({
     getSerie: seriesId => {
       return self.series.find(serie => serie.id === seriesId);
     },
-  })) // eslint-disable-line @typescript-eslint/no-unused-vars
+  }))
   .actions(self => ({
     setSeries: (series: SeriesSnapshot[]) => {
       self.series.replace(series as any);
     },
-    setStatus: (status: 'loading' | 'not-loaded' | 'success' | 'error') => {
-      self.status = status;
+    markFinished: () => {
+      self.finished = true;
     },
   }))
   .actions(self => ({
     fetchSeries: () => {
-      const api: Api = getEnv(self).api;
+      const api = self.environment.api;
+      self.setStatus('pending');
       api.getRoundSeries(self.id).then(res => {
         if (res.kind !== 'ok') {
           self.setStatus('error');
         } else {
           self.setSeries(res.series);
           self.series.map(serie => serie.fetchParticipants());
-          self.setStatus('success');
+          self.setStatus('done');
         }
       });
+    },
+  }))
+  .views(self => ({
+    get voted() {
+      for (var i = 0; i < self.series.length; ++i) {
+        if (!self.series[i].voted) {
+          return false;
+        }
+      }
+      return true;
     },
   }));
 

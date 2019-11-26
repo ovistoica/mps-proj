@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
-import { ViewStyle, View, FlatList } from 'react-native';
+import { ViewStyle, View, FlatList, Platform } from 'react-native';
 import { Screen } from '../../components/screen';
 import { useStores, RootStore } from '../../models/root-store';
 import { NavigationScreenProps } from 'react-navigation';
@@ -36,9 +36,18 @@ export const ContestsOverviewScreen: React.FunctionComponent<
   const renderContest = ({ item }: { item: ContestSnapshot }) => (
     <ContestCard
       contest={item}
-      onPress={() => props.navigation.push('contest', { contestId: item.id as any })}
+      onPress={() => {
+        contestsStore.setCurrentContestId(item.id);
+        props.navigation.push('contest', { contestId: item.id as any });
+      }}
     />
   );
+  /**
+   * No contest is selected in this screen
+   */
+  React.useEffect(() => {
+    contestsStore.setCurrentContestId(null);
+  }, []);
 
   const sendToLogin = React.useCallback(() => navigationStore.navigateTo('auth'), []);
   React.useEffect(() => {
@@ -53,13 +62,25 @@ export const ContestsOverviewScreen: React.FunctionComponent<
   return (
     <View testID="ContestsScreen" style={FULL}>
       <Screen style={CONTAINER} preset="fixed" backgroundColor={color.background}>
-        <View style={{ position: 'absolute', top: 5, right: 15 }}>
-          <Text preset="default">
+        <View
+          style={{
+            justifyContent: 'space-between',
+            flexDirection: 'row',
+            width: '100%',
+            alignSelf: 'center',
+            ...Platform.select({
+              android: {
+                marginTop: 15,
+              },
+            }),
+          }}
+        >
+          <Text preset="default" style={{ alignItems: 'center' }}>
             Hello{' '}
             <Text style={{ color: color.primaryDarker, fontWeight: 'bold' }}>{user.name}</Text>
           </Text>
           <Button
-            style={{ marginTop: 5, backgroundColor: color.top, width: 80, alignSelf: 'center' }}
+            style={{ backgroundColor: color.top, width: 80, alignSelf: 'center' }}
             textStyle={{ color: color.text }}
             text="Sign Out"
             onPress={logout}

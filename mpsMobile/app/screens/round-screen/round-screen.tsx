@@ -1,13 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
-import {
-  ViewStyle,
-  TextStyle,
-  SectionBase,
-  View,
-  SectionListData,
-  ActivityIndicator,
-} from 'react-native';
+import { ViewStyle, TextStyle, SectionListData, ActivityIndicator } from 'react-native';
 import { Text } from '../../components/text';
 import { Screen } from '../../components/screen';
 import { useStores } from '../../models/root-store';
@@ -20,6 +13,7 @@ import { ParticipantSnapshot } from '../../models';
 import { ParticipantCard } from '../../components/participant-card';
 import { TimeStatus, getTimeStatus } from '../../utils/contest.utils';
 import { SectionTitle } from '../../components/section-title';
+import { Button } from '../../components/button';
 
 export interface ContestScreenProps extends NavigationScreenProps<{}> {}
 
@@ -38,7 +32,7 @@ const TITLE: TextStyle = {
 };
 
 export const RoundScreen: React.FunctionComponent<ContestScreenProps> = observer(props => {
-  const { contestsStore } = useStores();
+  const { contestsStore, navigationStore } = useStores();
   const roundId = props.navigation.getParam('roundId' as never);
   const contestId = props.navigation.getParam('contestId' as never);
 
@@ -90,7 +84,7 @@ export const RoundScreen: React.FunctionComponent<ContestScreenProps> = observer
   });
 
   const renderSectionList = () => {
-    if (getSnapshot(round).status !== 'success') {
+    if (round.status === 'pending') {
       return (
         <ActivityIndicator size="large" color={color.secondary} style={{ marginTop: spacing[6] }} />
       );
@@ -102,6 +96,19 @@ export const RoundScreen: React.FunctionComponent<ContestScreenProps> = observer
         renderSectionHeader={({ section: { title, seriesStatus, seriesItem } }) => (
           <SectionTitle sectionStatus={seriesStatus} series={seriesItem} />
         )}
+        ListFooterComponent={
+          <Button
+            disabled={!round.voted}
+            text="View Results"
+            textStyle={{ color: color.textInverted, fontSize: 18, fontWeight: 'bold' }}
+            style={{
+              flex: 2,
+              alignSelf: 'center',
+              backgroundColor: !round.voted ? color.underground : color.primary,
+            }}
+            onPress={() => navigationStore.navigateTo('results', {})}
+          />
+        }
       />
     );
   };

@@ -1,5 +1,6 @@
 import { GeneralApiProblem } from './api-problem';
 import { ContestSnapshot, RoundSnapshot, SeriesSnapshot, ParticipantSnapshot } from '../../models';
+import { ContestantResultSnapshot } from '../../models/contestant-result';
 
 export type GetLoginResult = { kind: 'ok'; token: string; email: string } | GeneralApiProblem;
 export type GetContestsResult = { kind: 'ok'; contests: ContestSnapshot[] } | GeneralApiProblem;
@@ -9,4 +10,4 @@ export type GetParticipantsResult =
   | { kind: 'ok'; participants: ParticipantSnapshot[] }
   | GeneralApiProblem;
 export type GetSubmitVoteResult = { kind: 'ok' } | GeneralApiProblem;
-export type GetResults = {}
+export type GetResults = { kind: 'ok'; results: ContestantResultSnapshot[] } | GeneralApiProblem;

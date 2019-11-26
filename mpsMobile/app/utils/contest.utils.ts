@@ -1,5 +1,6 @@
 import { ContestSnapshot, RoundSnapshot, SeriesSnapshot, ParticipantSnapshot } from '../models';
 import moment from 'moment';
+import { ContestantResultSnapshot } from '../models/contestant-result';
 
 export function normalizeContest(contest: any): ContestSnapshot {
   return {
@@ -7,10 +8,12 @@ export function normalizeContest(contest: any): ContestSnapshot {
     type: contest.type,
     name: contest.name,
     password: contest.password,
-    startTime: Date.parse(contest.start_time),
-    endTime: Date.parse(contest.end_time),
+    startTime: contest.start_time,
+    endTime: contest.end_time,
     rounds: [],
     status: 'offline',
+    results: null,
+    currentRoundId: null,
   };
 }
 
@@ -22,7 +25,7 @@ export function normalizeContestRounds(round: any, contestId: number): RoundSnap
     endTime: round.end_time,
     roundNumber: round.round_no,
     series: [],
-    status: 'not-loaded',
+    finished: false,
   };
 }
 
@@ -45,6 +48,16 @@ export function normalizeParticipant(participant: any): ParticipantSnapshot {
     firstName: participant.first_name,
     lastName: participant.last_name,
     voted: false,
+  };
+}
+
+export function normalizeContestantResult(participant: any): ContestantResultSnapshot {
+  return {
+    id: participant.id,
+    firstName: participant.first_name,
+    lastName: participant.last_name,
+    grade: participant.nota,
+    status: participant.status,
   };
 }
 

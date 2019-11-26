@@ -1,9 +1,9 @@
-import { Instance, types } from "mobx-state-tree"
-import { RootNavigator } from "./root-navigator"
-import { NavigationActions, NavigationAction } from "react-navigation"
-import { NavigationEvents } from "./navigation-events"
+import { Instance, types } from 'mobx-state-tree';
+import { RootNavigator } from './root-navigator';
+import { NavigationActions, NavigationAction, NavigationParams } from 'react-navigation';
+import { NavigationEvents } from './navigation-events';
 
-const DEFAULT_STATE = RootNavigator.router.getStateForAction(NavigationActions.init(), null)
+const DEFAULT_STATE = RootNavigator.router.getStateForAction(NavigationActions.init(), null);
 
 /**
  * Finds the current route.
@@ -11,18 +11,18 @@ const DEFAULT_STATE = RootNavigator.router.getStateForAction(NavigationActions.i
  * @param navState the current nav state
  */
 function findCurrentRoute(navState) {
-  const route = navState.routes[navState.index]
+  const route = navState.routes[navState.index];
   if (route.routes) {
-    return findCurrentRoute(route)
+    return findCurrentRoute(route);
   }
-  return route
+  return route;
 }
 
 /**
  * Tracks the navigation state for `react-navigation` as well as providers
  * the actions for changing that state.
  */
-export const NavigationStoreModel = NavigationEvents.named("NavigationStore")
+export const NavigationStoreModel = NavigationEvents.named('NavigationStore')
   .props({
     /**
      * the navigation state tree (Frozen here means it is immutable.)
@@ -30,15 +30,15 @@ export const NavigationStoreModel = NavigationEvents.named("NavigationStore")
     state: types.optional(types.frozen(), DEFAULT_STATE),
   })
   .preProcessSnapshot(snapshot => {
-    if (!snapshot || !snapshot.state) return snapshot
+    if (!snapshot || !snapshot.state) return snapshot;
 
     try {
       // make sure react-navigation can handle our state
-      RootNavigator.router.getPathAndParamsForState(snapshot.state)
-      return snapshot
+      RootNavigator.router.getPathAndParamsForState(snapshot.state);
+      return snapshot;
     } catch (e) {
       // otherwise restore default state
-      return { ...snapshot, state: DEFAULT_STATE }
+      return { ...snapshot, state: DEFAULT_STATE };
     }
   })
   .actions(self => ({
@@ -46,7 +46,7 @@ export const NavigationStoreModel = NavigationEvents.named("NavigationStore")
      * Return all subscribers
      */
     actionSubscribers() {
-      return self.subs
+      return self.subs;
     },
 
     /**
@@ -58,24 +58,24 @@ export const NavigationStoreModel = NavigationEvents.named("NavigationStore")
      * @param shouldPush Should we push or replace the whole stack?
      */
     dispatch(action: NavigationAction, shouldPush: boolean = true) {
-      const previousNavState = shouldPush ? self.state : null
-      self.state = RootNavigator.router.getStateForAction(action, previousNavState) || self.state
-      self.fireSubscribers(action, previousNavState, self.state)
-      return true
+      const previousNavState = shouldPush ? self.state : null;
+      self.state = RootNavigator.router.getStateForAction(action, previousNavState) || self.state;
+      self.fireSubscribers(action, previousNavState, self.state);
+      return true;
     },
 
     /**
      * Resets the navigation back to the start.
      */
     reset() {
-      self.state = DEFAULT_STATE
+      self.state = DEFAULT_STATE;
     },
 
     /**
      * Finds the current route.
      */
     findCurrentRoute() {
-      return findCurrentRoute(self.state)
+      return findCurrentRoute(self.state);
     },
   }))
   .actions(self => ({
@@ -84,9 +84,9 @@ export const NavigationStoreModel = NavigationEvents.named("NavigationStore")
      *
      * @param routeName The route name.
      */
-    navigateTo(routeName: string) {
-      self.dispatch(NavigationActions.navigate({ routeName }))
+    navigateTo(routeName: string, params: NavigationParams) {
+      self.dispatch(NavigationActions.navigate({ routeName, params }));
     },
-  }))
+  }));
 
-export type NavigationStore = Instance<typeof NavigationStoreModel>
+export type NavigationStore = Instance<typeof NavigationStoreModel>;
