@@ -25,7 +25,7 @@ export function normalizeContestRounds(round: any, contestId: number): RoundSnap
     endTime: round.end_time,
     roundNumber: round.round_no,
     series: [],
-    status: 'not-loaded',
+    finished: false,
   };
 }
 

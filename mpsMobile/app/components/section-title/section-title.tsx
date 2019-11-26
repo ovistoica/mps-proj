@@ -64,7 +64,6 @@ export function SectionTitle(props: SectionTitleProps) {
       >
         {roundText}
       </Text>
-      <Button text="See Results" textStyle={{ color: color.textInverted }} />
     </View>
   );
 }

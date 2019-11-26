@@ -37,6 +37,12 @@ export const ContestModel = types
     get currentRound() {
       return self.getRound(self.currentRoundId);
     },
+    get lastRound() {
+      if (self.orderedRounds && self.orderedRounds.length) {
+        return self.orderedRounds[self.orderedRounds.length - 1];
+      }
+      return null;
+    },
   }))
   .actions(self => ({
     setRounds: (rounds: RoundSnapshot[]) => {

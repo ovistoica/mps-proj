@@ -16,6 +16,11 @@ export interface ResultCardProps {
    * An optional style override useful for padding & margin.
    */
   style?: ViewStyle | ViewStyle[];
+
+  /**
+   * Wether the contestant is the winner of the contest
+   */
+  winner: boolean;
 }
 
 const CONTAINER: ViewStyle = {
@@ -46,13 +51,14 @@ const CARD_TITLE: ViewStyle = {
 };
 
 const personIcon = <Icon name="user-circle" size={40} color={color.primary} />;
+const trophyIcon = <Icon name="trophy" size={30} color={color.secondary} />;
 
 /**
  *
  * Component to display information about a contestant's result
  */
 export function ResultCard(props: ResultCardProps) {
-  const { result, style } = props;
+  const { result, style, winner } = props;
   const statusStyle = { backgroundColor: result.status === 1 ? color.top : color.underground };
   const resultContainer = mergeAll(flatten([style, CONTAINER, statusStyle]));
 
@@ -62,6 +68,7 @@ export function ResultCard(props: ResultCardProps) {
         <View style={ICON_CONTAINER}>{personIcon}</View>
         <Text style={PARTICIPANT}>{result.firstName} </Text>
         <Text style={PARTICIPANT}>{result.lastName}</Text>
+        {winner && <View>{trophyIcon}</View>}
       </View>
       <View style={CARD_TITLE}>
         <Text style={PARTICIPANT}> GRADE: {result.grade}</Text>

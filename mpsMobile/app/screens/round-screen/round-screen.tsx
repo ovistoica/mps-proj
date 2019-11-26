@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
-import { ViewStyle, TextStyle, View, SectionListData, ActivityIndicator } from 'react-native';
+import { ViewStyle, TextStyle, SectionListData, ActivityIndicator } from 'react-native';
 import { Text } from '../../components/text';
 import { Screen } from '../../components/screen';
 import { useStores } from '../../models/root-store';
@@ -84,7 +84,7 @@ export const RoundScreen: React.FunctionComponent<ContestScreenProps> = observer
   });
 
   const renderSectionList = () => {
-    if (getSnapshot(round).status !== 'success') {
+    if (round.status === 'pending') {
       return (
         <ActivityIndicator size="large" color={color.secondary} style={{ marginTop: spacing[6] }} />
       );
@@ -98,9 +98,14 @@ export const RoundScreen: React.FunctionComponent<ContestScreenProps> = observer
         )}
         ListFooterComponent={
           <Button
+            disabled={!round.voted}
             text="View Results"
             textStyle={{ color: color.textInverted, fontSize: 18, fontWeight: 'bold' }}
-            style={{ flex: 2, alignSelf: 'center' }}
+            style={{
+              flex: 2,
+              alignSelf: 'center',
+              backgroundColor: !round.voted ? color.underground : color.primary,
+            }}
             onPress={() => navigationStore.navigateTo('results', {})}
           />
         }

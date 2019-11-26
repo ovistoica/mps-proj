@@ -39,25 +39,37 @@ export const ResultsScreen: React.FunctionComponent<ResultsScreenProps> = observ
   const round = contestsStore.currentContest.currentRound;
 
   const data: ContestantResultSnapshot[] = getSnapshot(currentContest.results.results);
+  const isLastRound = round.id === currentContest.lastRound.id;
 
-  const renderItem = ({ item }: { item: ContestantResultSnapshot }) => <ResultCard result={item} />;
+  const renderItem = ({ item, index }: { item: ContestantResultSnapshot; index: number }) => (
+    <ResultCard result={item} winner={index === 0 && isLastRound} />
+  );
 
   return (
-    <Screen style={ROOT} preset="scroll">
+    <Screen style={ROOT} preset="fixed">
       <Header
         headerText={`Results for Round ${round.roundNumber}`}
         style={HEADER}
         titleStyle={TITLE}
       />
-      <FlatList<ContestantResultSnapshot> data={data} renderItem={renderItem} />
-      <Button
-        text="Back to rounds"
-        textStyle={{ color: color.textInverted, fontSize: 16 }}
-        style={{ flex: 2, alignSelf: 'center' }}
-        onPress={() =>
-          navigationStore.navigateTo('contest', {
-            contestId: contestsStore.currentContest.id,
-          })
+
+      <FlatList<ContestantResultSnapshot>
+        data={data}
+        renderItem={renderItem}
+        style={{ flex: 0.7 }}
+        keyExtractor={item => 'result' + item.id}
+        ListFooterComponent={
+          <Button
+            text="Back to rounds"
+            textStyle={{ color: color.textInverted, fontSize: 16 }}
+            style={{ flex: 2, alignSelf: 'center', marginBottom: 30 }}
+            onPress={() => {
+              round.markFinished();
+              navigationStore.navigateTo('contest', {
+                contestId: contestsStore.currentContest.id,
+              });
+            }}
+          />
         }
       />
     </Screen>
